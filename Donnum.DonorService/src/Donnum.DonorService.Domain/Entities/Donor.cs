@@ -12,8 +12,8 @@ public class Donor
     public string? Street { get; set; }
     public string City { get; set; } = string.Empty;
     public string Province { get; set; } = string.Empty;
-    public float Latitude { get; set; }
-    public float Longitude { get; set; }
+    public decimal Latitude { get; set; }
+    public decimal Longitude { get; set; }
     public int ReliabilityScore { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

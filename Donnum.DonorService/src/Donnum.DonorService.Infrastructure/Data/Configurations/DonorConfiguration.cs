@@ -55,8 +55,8 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
             Latitude = -34.6037m,
             Longitude = -58.3816m,
             ReliabilityScore = 100,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
         });
     }
 }
