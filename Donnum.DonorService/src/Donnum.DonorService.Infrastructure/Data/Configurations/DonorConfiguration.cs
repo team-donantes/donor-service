@@ -1,7 +1,6 @@
-using System;
+using Donnum.DonorService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Donnum.DonorService.Domain.Entities;
 
 namespace Donnum.DonorService.Infrastructure.Data.Configurations;
 
@@ -9,21 +8,42 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
 {
     public void Configure(EntityTypeBuilder<Donor> builder)
     {
+        builder.ToTable("Donors");
+
         builder.HasKey(x => x.Id);
 
-       
-        builder.Property(x => x.BloodGroup).HasMaxLength(3).IsRequired();
-        builder.Property(x => x.RhFactor).HasMaxLength(15).IsRequired();
-        builder.Property(x => x.Street).HasMaxLength(255).IsRequired(false);
-        builder.Property(x => x.City).HasMaxLength(100).IsRequired();
-        builder.Property(x => x.Province).HasMaxLength(100).IsRequired();
-        
-       
-        builder.Property(x => x.Latitude).HasPrecision(10, 8);
-        builder.Property(x => x.Longitude).HasPrecision(11, 8);
-        builder.Property(x => x.ReliabilityScore).HasPrecision(5, 2);
+        builder.Property(x => x.BloodGroup)
+            .HasMaxLength(3)
+            .IsRequired();
 
-        
+        builder.Property(x => x.RhFactor)
+            .HasMaxLength(15)
+            .IsRequired();
+
+        builder.Property(x => x.Street)
+            .HasMaxLength(255)
+            .IsRequired(false);
+
+        builder.Property(x => x.City)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.Province)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.Latitude)
+            .HasPrecision(10, 8);
+
+        builder.Property(x => x.Longitude)
+            .HasPrecision(11, 8);
+
+        builder.Property(x => x.ReliabilityScore)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedAt).IsRequired();
+        builder.Property(x => x.UpdatedAt).IsRequired();
+
         builder.HasMany(x => x.Donations)
             .WithOne(x => x.Donor)
             .HasForeignKey(x => x.DonorId)
@@ -39,11 +59,9 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
             .HasForeignKey(x => x.DonorId)
             .OnDelete(DeleteBehavior.Cascade);
 
-       
-        builder.HasIndex(x => x.AuthUserId).IsUnique();
-        
-       
-        builder.HasData(new Donor
+        builder.HasIndex(x => x.AuthUserId)
+            .IsUnique();
+            builder.HasData(new Donor
         {
             Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
             AuthUserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
@@ -59,4 +77,5 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
             UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
         });
     }
+
 }
