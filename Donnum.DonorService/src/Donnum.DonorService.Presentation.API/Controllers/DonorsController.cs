@@ -1,6 +1,7 @@
 using Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorProfile;
 using Donnum.DonorService.Application.Features.Donors.Commands.UpdateDonorProfile;
 using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorProfile;
+using Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,25 @@ public class DonorsController : ControllerBase
     public DonorsController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet("{id}/donations")]
+    public async Task<IActionResult> GetDonationHistory([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        if (!Guid.TryParse(id, out var donorId))
+        {
+            return NotFound("El formato del ID del donante no es válido.");
+        }
+
+        var result = await _mediator.Send(new GetDonationHistoryQuery(donorId), cancellationToken);
+
+
+        if (result is null)
+        {
+            return NotFound($"El donante con ID {id} no existe.");
+        }
+
+        return Ok(result);
     }
 
     /// <summary>
@@ -95,3 +115,4 @@ public sealed record UpdateDonorProfileRequest(
     decimal Latitude,
     decimal Longitude
 );
+
