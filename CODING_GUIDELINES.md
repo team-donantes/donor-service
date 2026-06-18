@@ -8,25 +8,24 @@ Utiliza siempre Primary Constructors en lugar de declarar campos privados y cons
 
 **Incorrecto:**
 ```csharp
-public class PingCommandHandler : IRequestHandler<PingCommand, string>
+public class GetDonorQueryHandler : IRequestHandler<GetDonorQuery, DonorDto>
 {
-    private readonly ILogger<PingCommandHandler> _logger;
+    private readonly IDonorRepository _repository;
 
-    public PingCommandHandler(ILogger<PingCommandHandler> logger)
+    public GetDonorQueryHandler(IDonorRepository repository)
     {
-        _logger = logger;
+        _repository = repository;
     }
 }
 ```
 
 **Correcto:**
 ```csharp
-public class PingCommandHandler(ILogger<PingCommandHandler> logger) : IRequestHandler<PingCommand, string>
+public class GetDonorQueryHandler(IDonorRepository repository) : IRequestHandler<GetDonorQuery, DonorDto>
 {
-    public async Task<string> Handle(PingCommand request, CancellationToken cancellationToken)
+    public async Task<DonorDto> Handle(GetDonorQuery request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Processing ping...");
-        return await Task.FromResult("Pong");
+        return await repository.GetByIdAsync(request.Id, cancellationToken);
     }
 }
 ```

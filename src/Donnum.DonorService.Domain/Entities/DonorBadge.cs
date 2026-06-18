@@ -1,10 +1,11 @@
 using System;
 
+using Donnum.DonorService.Domain.Common;
+
 namespace Donnum.DonorService.Domain.Entities;
 
-public class DonorBadge
+public class DonorBadge : Entity
 {
-    public Guid Id { get; set; }
     public Guid BadgeId { get; set; }
     public Guid DonorId { get; set; }
     public DateTime AssignedAt { get; set; }
