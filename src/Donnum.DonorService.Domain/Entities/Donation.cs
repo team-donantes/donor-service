@@ -1,10 +1,11 @@
 using System;
 
+using Donnum.DonorService.Domain.Common;
+
 namespace Donnum.DonorService.Domain.Entities;
 
-public class Donation
+public class Donation : Entity
 {
-    public Guid Id { get; set; }
     public Guid DonorId { get; set; }
     public Guid DonationRequestId { get; set; }
     public Guid MedicalCenterId { get; set; }
