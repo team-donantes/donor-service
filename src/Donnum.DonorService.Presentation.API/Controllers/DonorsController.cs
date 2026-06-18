@@ -1,7 +1,8 @@
 using Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorProfile;
-using Donnum.DonorService.Application.Features.Donors.Commands.UpdateDonorProfile;
 using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorProfile;
 using Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
+using Donnum.DonorService.Application.Features.Donors.Mappers;
+using Donnum.DonorService.Presentation.API.Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,6 @@ public class DonorsController : ControllerBase
         }
 
         var result = await _mediator.Send(new GetDonationHistoryQuery(donorId), cancellationToken);
-
 
         if (result is null)
         {
@@ -76,13 +76,7 @@ public class DonorsController : ControllerBase
         [FromBody] UpdateDonorProfileRequest body,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateDonorProfileCommand(
-            Id: id,
-            Street: body.Street,
-            City: body.City,
-            Province: body.Province,
-            Latitude: body.Latitude,
-            Longitude: body.Longitude);
+        var command = DonorMapper.ToCommand(id, body);
 
         await _mediator.Send(command, cancellationToken);
         return NoContent();
@@ -107,12 +101,3 @@ public class DonorsController : ControllerBase
         return Ok(dto);
     }
 }
-
-public sealed record UpdateDonorProfileRequest(
-    string? Street,
-    string City,
-    string Province,
-    decimal Latitude,
-    decimal Longitude
-);
-

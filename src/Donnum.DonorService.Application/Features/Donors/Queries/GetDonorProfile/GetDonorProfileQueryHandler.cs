@@ -1,6 +1,7 @@
 using Donnum.DonorService.Application.Exceptions;
 using Donnum.DonorService.Application.Features.Donors.Dtos;
 using Donnum.DonorService.Domain.Repositories;
+using Donnum.DonorService.Application.Features.Donors.Mappers;
 using MediatR;
 
 namespace Donnum.DonorService.Application.Features.Donors.Queries.GetDonorProfile;
@@ -19,6 +20,6 @@ public sealed class GetDonorProfileQueryHandler : IRequestHandler<GetDonorProfil
         var donor = await _donorRepository.GetByIdAsync(request.Id, cancellationToken)
             ?? throw new NotFoundException(nameof(Domain.Entities.Donor), request.Id);
 
-        return DonorProfileDto.FromDonor(donor);
+        return DonorMapper.ToDto(donor);
     }
 }

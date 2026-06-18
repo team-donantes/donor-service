@@ -1,5 +1,6 @@
 using Donnum.DonorService.Application.Exceptions;
 using Donnum.DonorService.Domain.Repositories;
+using Donnum.DonorService.Application.Features.Donors.Mappers;
 using MediatR;
 
 namespace Donnum.DonorService.Application.Features.Donors.Commands.UpdateDonorProfile;
@@ -18,7 +19,7 @@ public sealed class UpdateDonorProfileCommandHandler : IRequestHandler<UpdateDon
         var donor = await _donorRepository.GetByIdAsync(request.Id, cancellationToken)
             ?? throw new NotFoundException(nameof(Domain.Entities.Donor), request.Id);
 
-        request.ApplyTo(donor);
+        DonorMapper.ApplyUpdate(request, donor);
 
         _donorRepository.Update(donor);
         await _donorRepository.SaveChangesAsync(cancellationToken);

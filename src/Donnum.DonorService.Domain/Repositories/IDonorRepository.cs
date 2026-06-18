@@ -6,7 +6,7 @@ public interface IDonorRepository
 {
     Task<Donor?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<Donor?> GetByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<bool> ExistsByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default);
 

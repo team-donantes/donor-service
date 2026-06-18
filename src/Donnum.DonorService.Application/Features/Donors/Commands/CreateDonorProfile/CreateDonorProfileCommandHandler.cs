@@ -1,6 +1,7 @@
 using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.Exceptions;
 using Donnum.DonorService.Domain.Repositories;
+using Donnum.DonorService.Application.Features.Donors.Mappers;
 using MediatR;
 
 namespace Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorProfile;
@@ -19,7 +20,7 @@ public sealed class CreateDonorProfileCommandHandler : IRequestHandler<CreateDon
         if (await _donorRepository.ExistsByAuthUserIdAsync(request.AuthUserId, cancellationToken))
             throw new DomainException($"Ya existe un perfil de donante para el usuario '{request.AuthUserId}'.");
 
-        var donor = request.ToEntity();
+        var donor = DonorMapper.ToEntity(request);
 
         await _donorRepository.AddAsync(donor, cancellationToken);
         await _donorRepository.SaveChangesAsync(cancellationToken);

@@ -16,11 +16,11 @@ public class Donor : Entity
     public string City { get; set; } = string.Empty;
     public string Province { get; set; } = string.Empty;
     public Location Location { get; set; } = null!;
-    public int ReliabilityScore { get; set; }
+    public int Points { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
     public ICollection<Donation> Donations { get; set; } = [];
-    public ICollection<DonationRequestParticipation> DonationRequestParticipations { get; init; } = [];
+    public ICollection<DonationRequestParticipation> DonationRequestParticipations { get; set; } = [];
     public ICollection<DonorBadge> DonorBadges { get; set; } = [];
 }

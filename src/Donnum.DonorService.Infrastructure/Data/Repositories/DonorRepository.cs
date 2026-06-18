@@ -19,10 +19,10 @@ public sealed class DonorRepository : IDonorRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
-    public async Task<Donor?> GetByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
         => await _context.Donors
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.AuthUserId == authUserId, cancellationToken);
+            .AnyAsync(d => d.Id == id, cancellationToken);
 
     public async Task<bool> ExistsByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default)
         => await _context.Donors

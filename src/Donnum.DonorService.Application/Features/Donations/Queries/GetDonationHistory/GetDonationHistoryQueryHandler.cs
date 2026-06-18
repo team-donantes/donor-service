@@ -3,17 +3,17 @@ using MediatR;
 
 namespace Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
 
-public class GetDonationHistoryQueryHandler(IDonationRepository donationRepository)
+public class GetDonationHistoryQueryHandler(IDonationRepository donationRepository, IDonorRepository donorRepository)
     : IRequestHandler<GetDonationHistoryQuery, DonorDonationHistoryDto?>
 {
     public async Task<DonorDonationHistoryDto?> Handle(GetDonationHistoryQuery request, CancellationToken cancellationToken)
     {
-        var donations = await donationRepository.GetByDonorIdAsync(request.DonorId, cancellationToken);
-
-        if (donations is null)
+        if (!await donorRepository.ExistsAsync(request.DonorId, cancellationToken))
         {
             return null;
         }
+
+        var donations = await donationRepository.GetByDonorIdAsync(request.DonorId, cancellationToken);
 
         return DonationMapper.MapToDto(request.DonorId, donations);
     }
