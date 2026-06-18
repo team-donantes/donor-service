@@ -13,6 +13,7 @@ public sealed record DonorProfileDto(
     decimal Latitude,
     decimal Longitude,
     int ReliabilityScore,
+    int Points,
     DateTime CreatedAt,
     DateTime UpdatedAt
 )
@@ -29,6 +30,7 @@ public sealed record DonorProfileDto(
             Latitude: donor.Latitude,
             Longitude: donor.Longitude,
             ReliabilityScore: donor.ReliabilityScore,
+            Points: donor.Points,
             CreatedAt: donor.CreatedAt,
             UpdatedAt: donor.UpdatedAt
         );

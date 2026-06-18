@@ -17,6 +17,7 @@ public static class CreateDonorProfileCommandMapper
             Latitude = command.Latitude,
             Longitude = command.Longitude,
             ReliabilityScore = 100,
+            Points = 0,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

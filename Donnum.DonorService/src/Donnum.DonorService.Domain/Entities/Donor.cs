@@ -16,6 +16,7 @@ public class Donor
     public decimal Longitude { get; set; }
 
     public int ReliabilityScore { get; set; }
+    public int Points { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

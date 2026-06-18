@@ -41,6 +41,9 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         builder.Property(x => x.ReliabilityScore)
             .IsRequired();
 
+        builder.Property(x => x.Points)
+            .IsRequired();
+
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
 
@@ -73,6 +76,7 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
             Latitude = -34.6037m,
             Longitude = -58.3816m,
             ReliabilityScore = 100,
+            Points = 0,
             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
         });
