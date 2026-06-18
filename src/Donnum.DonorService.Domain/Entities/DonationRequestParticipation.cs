@@ -1,11 +1,12 @@
 using System;
 using Donnum.DonorService.Domain.Enums;
 
+using Donnum.DonorService.Domain.Common;
+
 namespace Donnum.DonorService.Domain.Entities;
 
-public class DonationRequestParticipation
+public class DonationRequestParticipation : Entity
 {
-    public Guid Id { get; set; }
     public Guid DonorId { get; set; }
     public Guid DonationRequestId { get; set; }
     public DateTime RegisteredAt { get; set; }
