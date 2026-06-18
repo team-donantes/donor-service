@@ -1,3 +1,4 @@
+using Donnum.BuildingBlocks.Messaging;
 using Donnum.DonorService.Domain.Repositories;
 using Donnum.DonorService.Infrastructure.Data;
 using Donnum.DonorService.Infrastructure.Data.Repositories;
@@ -16,6 +17,8 @@ public static class DependencyInjection
 
         services.AddScoped<IDonorRepository, DonorRepository>();
         services.AddScoped<IDonationRepository, DonationRepository>();
+
+        services.AddMessageBroker(configuration);
 
         return services;
     }
