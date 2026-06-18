@@ -1,4 +1,5 @@
 using Donnum.DonorService.Domain.Entities;
+using Donnum.DonorService.Domain.ValueObjects;
 
 namespace Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorProfile;
 
@@ -14,8 +15,7 @@ public static class CreateDonorProfileCommandMapper
             Street = command.Street?.Trim(),
             City = command.City.Trim(),
             Province = command.Province.Trim(),
-            Latitude = command.Latitude,
-            Longitude = command.Longitude,
+            Location = new Location(command.Latitude, command.Longitude),
             ReliabilityScore = 100,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

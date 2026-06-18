@@ -26,8 +26,8 @@ public sealed record DonorProfileDto(
             Street: donor.Street,
             City: donor.City,
             Province: donor.Province,
-            Latitude: donor.Latitude,
-            Longitude: donor.Longitude,
+            Latitude: donor.Location.Latitude,
+            Longitude: donor.Location.Longitude,
             ReliabilityScore: donor.ReliabilityScore,
             CreatedAt: donor.CreatedAt,
             UpdatedAt: donor.UpdatedAt
