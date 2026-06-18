@@ -1,0 +1,19 @@
+using System;
+using Donnum.DonorService.Domain.Enums;
+
+using Donnum.DonorService.Domain.Common;
+
+namespace Donnum.DonorService.Domain.Entities;
+
+public class DonationRequestParticipation : Entity
+{
+    public Guid DonorId { get; set; }
+    public Guid DonationRequestId { get; set; }
+    public DateTime RegisteredAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public ParticipationStatus Status { get; set; }
+
+  
+    public Donor Donor { get; set; } = null!;
+}

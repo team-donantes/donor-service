@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Donnum.DonorService.Application/Donnum.DonorService.Application.csproj" />
+    <Project Path="src/Donnum.DonorService.Domain/Donnum.DonorService.Domain.csproj" />
+    <Project Path="src/Donnum.DonorService.Infrastructure/Donnum.DonorService.Infrastructure.csproj" />
+    <Project Path="src/Donnum.DonorService.Presentation.API/Donnum.DonorService.Presentation.API.csproj" />
+  </Folder>
+</Solution>

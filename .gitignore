@@ -1,1 +1,35 @@
 /.vs
+
+# ==========================================
+# .NET 10 Build & Outputs
+# ==========================================
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+
+# ==========================================
+# VS Code Settings & Cache
+# ==========================================
+.vscode/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.history/
+
+# ==========================================
+# User-Specific / Local Environments
+# ==========================================
+*.user
+*.userosscache
+*.sln.docstates
+
+# Secrets and App Settings (Local Environment)
+appsettings.Development.json
+appsettings.Local.json
+.env
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+Thumbs.db
