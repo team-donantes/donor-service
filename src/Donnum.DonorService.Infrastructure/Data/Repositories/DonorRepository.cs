@@ -24,6 +24,13 @@ public sealed class DonorRepository : IDonorRepository
             .AsNoTracking()
             .AnyAsync(d => d.Id == id, cancellationToken);
 
+    public async Task<IReadOnlyList<DonorBadge>> GetBadgesByDonorIdAsync(Guid donorId, CancellationToken cancellationToken = default)
+        => await _context.DonorBadges
+            .AsNoTracking()
+            .Include(db => db.Badge)
+            .Where(db => db.DonorId == donorId)
+            .ToListAsync(cancellationToken);
+
     public async Task<bool> ExistsByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default)
         => await _context.Donors
             .AsNoTracking()

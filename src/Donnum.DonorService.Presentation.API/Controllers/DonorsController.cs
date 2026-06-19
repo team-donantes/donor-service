@@ -1,5 +1,6 @@
 using Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorProfile;
 using Donnum.DonorService.Application.Features.Donors.Commands.UpdateDonorProfile;
+using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorBadges;
 using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorProfile;
 using Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
 using Donnum.DonorService.Application.Features.Donors.Mappers;
@@ -100,5 +101,23 @@ public class DonorsController : ControllerBase
         var query = new GetDonorProfileQuery(id);
         var dto = await _mediator.Send(query, cancellationToken);
         return Ok(dto);
+    }
+
+    /// <summary>
+    /// Returns all badges earned by a donor.
+    /// </summary>
+    /// <param name="id">Donor identifier (route).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the list of badges, or 404 if the donor does not exist.</returns>
+    [HttpGet("{id:guid}/badges")]
+    [ProducesResponseType(typeof(IReadOnlyList<Application.Features.Donors.Dtos.DonorBadgeDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDonorBadges(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetDonorBadgesQuery(id);
+        var badges = await _mediator.Send(query, cancellationToken);
+        return Ok(badges);
     }
 }
