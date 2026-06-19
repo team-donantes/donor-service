@@ -1,4 +1,5 @@
 using Donnum.DonorService.Application.Exceptions;
+using Donnum.DonorService.Application.Features.Donations.Mappers;
 using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.Repositories;
 using MediatR;
@@ -16,14 +17,7 @@ public sealed class DonationCompletedEventHandler(
             throw new NotFoundException(nameof(Donor), request.DonorId);
         }
 
-        var donation = new Donation
-        {
-            DonorId = request.DonorId,
-            DonationRequestId = request.DonationRequestId,
-            MedicalCenterId = request.MedicalCenterId,
-            DonationDate = request.DonationDate,
-            CreatedAt = request.CreatedAt
-        };
+        var donation = DonationMapper.ToEntity(request);
 
         await donationRepository.AddAsync(donation, cancellationToken);
         await donationRepository.SaveChangesAsync(cancellationToken);
