@@ -20,7 +20,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <DonnumBuildingBlocksPath>..\..\..\..\Donnum.DonorService\building-blocks</DonnumBuildingBlocksPath>
+    <DonnumBuildingBlocksPath>..\..\..\building-blocks</DonnumBuildingBlocksPath>
   </PropertyGroup>
 
   <ItemGroup>
