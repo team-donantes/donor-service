@@ -31,6 +31,13 @@ public class GlobalExceptionHandler : IExceptionHandler
             problemDetails.Detail = "One or more validation errors occurred.";
             problemDetails.Extensions.Add("errors", validationException.Errors);
         }
+        else if (exception is NotFoundException notFoundException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails.Title = "Resource Not Found";
+            problemDetails.Status = StatusCodes.Status404NotFound;
+            problemDetails.Detail = notFoundException.Message;
+        }
         else if (exception is DomainException domainException)
         {
             httpContext.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
