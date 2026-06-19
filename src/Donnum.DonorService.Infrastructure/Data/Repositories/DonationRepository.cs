@@ -13,4 +13,11 @@ public class DonationRepository(ApplicationDbContext context) : IDonationReposit
             .Where(d => d.DonorId == donorId)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task AddAsync(Donation donation, CancellationToken cancellationToken)
+        => await context.Donations.AddAsync(donation, cancellationToken);
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+        => context.SaveChangesAsync(cancellationToken);
 }
+
