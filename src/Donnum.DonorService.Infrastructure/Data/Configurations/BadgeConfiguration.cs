@@ -18,10 +18,10 @@ public class BadgeConfiguration : IEntityTypeConfiguration<Badge>
 
         
         builder.HasData(
-            new Badge { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Name = "Donante Donor", BadgeType = BadgeType.Silver, BadgePoints = 50 },
-            new Badge { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), Name = "Frecuente", BadgeType = BadgeType.Gold, BadgePoints = 100 },
-            new Badge { Id = Guid.Parse("55555555-5555-5555-5555-555555555555"), Name = "Comprometido", BadgeType = BadgeType.Platinum, BadgePoints = 250 },
-            new Badge { Id = Guid.Parse("66666666-6666-6666-6666-666666666666"), Name = "Heroe", BadgeType = BadgeType.Diamond, BadgePoints = 500 }
+            new { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Name = "Donante Donor", BadgeType = BadgeType.Silver, BadgePoints = 50, IsDeleted = false },
+            new { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), Name = "Frecuente", BadgeType = BadgeType.Gold, BadgePoints = 100, IsDeleted = false },
+            new { Id = Guid.Parse("55555555-5555-5555-5555-555555555555"), Name = "Comprometido", BadgeType = BadgeType.Platinum, BadgePoints = 250, IsDeleted = false },
+            new { Id = Guid.Parse("66666666-6666-6666-6666-666666666666"), Name = "Heroe", BadgeType = BadgeType.Diamond, BadgePoints = 500, IsDeleted = false }
         );
     }
 }

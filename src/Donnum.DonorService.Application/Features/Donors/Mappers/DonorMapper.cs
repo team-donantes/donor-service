@@ -4,7 +4,6 @@ using Donnum.DonorService.Application.Features.Donors.Commands.UpdateDonorProfil
 using Donnum.DonorService.Application.Features.Donors.Dtos;
 using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.ValueObjects;
-using Donnum.DonorService.Presentation.API.Contracts;
 
 namespace Donnum.DonorService.Application.Features.Donors.Mappers;
 
@@ -13,7 +12,6 @@ public static class DonorMapper
     public static Donor ToEntity(CreateDonorProfileCommand command)
         => new Donor
         {
-            Id = Guid.NewGuid(),
             AuthUserId = command.AuthUserId,
             BloodGroup = command.BloodGroup.Trim().ToUpperInvariant(),
             RhFactor = command.RhFactor.Trim(),
@@ -49,15 +47,5 @@ public static class DonorMapper
             Points: donor.Points,
             CreatedAt: donor.CreatedAt,
             UpdatedAt: donor.UpdatedAt
-        );
-
-    public static UpdateDonorProfileCommand ToCommand(Guid id, UpdateDonorProfileRequest request)
-        => new UpdateDonorProfileCommand(
-            Id: id,
-            Street: request.Street,
-            City: request.City,
-            Province: request.Province,
-            Latitude: request.Latitude,
-            Longitude: request.Longitude
         );
 }

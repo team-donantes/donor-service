@@ -16,4 +16,4 @@ public sealed record DonorProfileDto(
     DateTime CreatedAt,
     DateTime UpdatedAt
 )
-}
+;

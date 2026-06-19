@@ -1,4 +1,5 @@
 using Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorProfile;
+using Donnum.DonorService.Application.Features.Donors.Commands.UpdateDonorProfile;
 using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorProfile;
 using Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
 using Donnum.DonorService.Application.Features.Donors.Mappers;
@@ -76,7 +77,7 @@ public class DonorsController : ControllerBase
         [FromBody] UpdateDonorProfileRequest body,
         CancellationToken cancellationToken)
     {
-        var command = DonorMapper.ToCommand(id, body);
+        var command = Donnum.DonorService.Presentation.API.Mappers.DonorApiMapper.ToCommand(id, body);
 
         await _mediator.Send(command, cancellationToken);
         return NoContent();
