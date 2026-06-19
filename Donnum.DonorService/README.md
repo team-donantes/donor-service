@@ -108,8 +108,8 @@ El servicio utiliza `Donnum.BuildingBlocks` para la integración asincrónica co
   "Broker": {
     "HostName": "localhost",
     "Port": 5672,
-    "UserName": "guest",
-    "Password": "guest",
+    "UserName": "",
+    "Password": "",
     "VirtualHost": "/",
     "ExchangeName": "donnum.events",
     "ClientProvidedName": "donnum-donor-service"
