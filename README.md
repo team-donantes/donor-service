@@ -97,15 +97,38 @@ Principales entidades:
 
 ---
 
-## Eventos
+## Mensajería y Eventos
 
-### Publicados
+El servicio utiliza `Donnum.BuildingBlocks` para la integración asincrónica con RabbitMQ basada en `MessageEnvelope`.
 
-* InscripcionDonante
+### Configuración del Broker de Mensajería (appsettings.json)
 
-### Consumidos
+```json
+"Messaging": {
+  "Broker": {
+    "HostName": "localhost",
+    "Port": 5672,
+    "UserName": "",
+    "Password": "",
+    "VirtualHost": "/",
+    "ExchangeName": "donnum.events",
+    "ClientProvidedName": "donnum-donor-service"
+  }
+}
+```
 
-* DonacionFisicaCompletada
+### Eventos Publicados
+
+* **Inscripción de Donante**
+  * **Topic**: `donor.participation.registered`
+  * **Payload**: Contiene información local del registro de participación.
+
+### Eventos Consumidos
+
+* **Donación Física Completada**
+  * **Topic**: `donation.physical.completed`
+  * **Queue**: `donor-service.donation-completed`
+  * **Routing Key**: `donation.physical.completed`
 
 ---
 
