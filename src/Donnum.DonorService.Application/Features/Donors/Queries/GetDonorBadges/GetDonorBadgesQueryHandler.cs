@@ -1,5 +1,6 @@
 using Donnum.DonorService.Application.Exceptions;
 using Donnum.DonorService.Application.Features.Donors.Dtos;
+using Donnum.DonorService.Application.Features.Donors.Mappers;
 using Donnum.DonorService.Domain.Repositories;
 using MediatR;
 
@@ -19,11 +20,8 @@ public sealed class GetDonorBadgesQueryHandler : IRequestHandler<GetDonorBadgesQ
         if (!await _donorRepository.ExistsAsync(request.DonorId, cancellationToken))
             throw new NotFoundException(nameof(Domain.Entities.Donor), request.DonorId);
 
-        var badges = await _donorRepository.GetBadgesByDonorIdAsync(
-            request.DonorId, 
-            Donnum.DonorService.Application.Features.Donors.Mappers.DonorBadgeMapper.ToDto, 
-            cancellationToken);
+        var badges = await _donorRepository.GetBadgesByDonorIdAsync(request.DonorId, cancellationToken);
 
-        return badges;
+        return badges.Select(DonorBadgeMapper.MapToDto).ToList().AsReadOnly();
     }
 }

@@ -1,5 +1,4 @@
 using Donnum.DonorService.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace Donnum.DonorService.Domain.Repositories;
 
@@ -8,7 +7,7 @@ public interface IDonorRepository
     Task<Donor?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<TResult>> GetBadgesByDonorIdAsync<TResult>(Guid donorId, Expression<Func<DonorBadge, TResult>> selector, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<DonorBadge>> GetBadgesByDonorIdAsync(Guid donorId, CancellationToken cancellationToken = default);
 
     Task<bool> ExistsByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default);
 
