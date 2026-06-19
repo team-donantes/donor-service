@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Donnum.BuildingBlocks.Messaging.Abstractions;
 using Donnum.DonorService.Application.Events;
-using Donnum.DonorService.Application.Features.Donations.Commands.RegisterDonation;
+using Donnum.DonorService.Application.Features.Donations.Events.DonationCompleted;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,21 +48,19 @@ public sealed class DonationCompletedMessageConsumer(
         using var scope = scopeFactory.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-        var command = new RegisterDonationCommand(
+        var @event = new DonationCompletedEvent(
             payload.DonorId,
             payload.DonationRequestId,
             payload.MedicalCenterId,
             payload.DonationDate,
             payload.CreatedAt);
 
-        await mediator.Send(command, cancellationToken);
+        await mediator.Send(@event, cancellationToken);
 
+        // TODO: En el futuro, persistir esta información en una tabla de auditoría dedicada si se requiere.
         logger.LogInformation(
-            "Donación registrada desde evento {Topic}. DonorId={DonorId}, DonationRequestId={DonationRequestId}, MessageId={MessageId}, CorrelationId={CorrelationId}.",
-            envelope.Topic,
+            "Donación registrada. DonorId: {DonorId}, DonationRequestId: {DonationRequestId}",
             payload.DonorId,
-            payload.DonationRequestId,
-            envelope.MessageId,
-            envelope.CorrelationId);
+            payload.DonationRequestId);
     }
 }

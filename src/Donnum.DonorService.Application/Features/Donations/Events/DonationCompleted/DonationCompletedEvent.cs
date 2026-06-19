@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace Donnum.DonorService.Application.Features.Donations.Commands.RegisterDonation;
+namespace Donnum.DonorService.Application.Features.Donations.Events.DonationCompleted;
 
-public sealed record RegisterDonationCommand(
+public sealed record DonationCompletedEvent(
     Guid DonorId,
     Guid DonationRequestId,
     Guid MedicalCenterId,
