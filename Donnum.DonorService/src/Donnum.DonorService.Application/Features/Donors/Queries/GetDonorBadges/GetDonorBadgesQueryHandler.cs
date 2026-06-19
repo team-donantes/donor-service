@@ -16,12 +16,14 @@ public sealed class GetDonorBadgesQueryHandler : IRequestHandler<GetDonorBadgesQ
 
     public async Task<IReadOnlyList<DonorBadgeDto>> Handle(GetDonorBadgesQuery request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetByIdWithBadgesAsync(request.DonorId, cancellationToken)
-            ?? throw new NotFoundException(nameof(Domain.Entities.Donor), request.DonorId);
+        if (!await _donorRepository.ExistsAsync(request.DonorId, cancellationToken))
+            throw new NotFoundException(nameof(Domain.Entities.Donor), request.DonorId);
 
-        return donor.DonorBadges
-            .Select(DonorBadgeDto.FromDonorBadge)
-            .ToList()
-            .AsReadOnly();
+        var badges = await _donorRepository.GetBadgesByDonorIdAsync(
+            request.DonorId, 
+            Donnum.DonorService.Application.Features.Donors.Mappers.DonorBadgeMapper.ToDto, 
+            cancellationToken);
+
+        return badges;
     }
 }

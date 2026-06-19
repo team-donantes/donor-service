@@ -2,6 +2,7 @@ using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.Repositories;
 using Donnum.DonorService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Donnum.DonorService.Infrastructure.Data.Repositories;
 
@@ -19,13 +20,18 @@ public sealed class DonorRepository : IDonorRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
-    public async Task<Donor?> GetByIdWithBadgesAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
         => await _context.Donors
             .AsNoTracking()
-            .Include(d => d.DonorBadges)
-                .ThenInclude(db => db.Badge)
-            .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+            .AnyAsync(d => d.Id == id, cancellationToken);
 
+    public async Task<IReadOnlyList<TResult>> GetBadgesByDonorIdAsync<TResult>(Guid donorId, Expression<Func<DonorBadge, TResult>> selector, CancellationToken cancellationToken = default)
+        => await _context.Donors
+            .AsNoTracking()
+            .Where(d => d.Id == donorId)
+            .SelectMany(d => d.DonorBadges)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
 
     public async Task<Donor?> GetByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default)
         => await _context.Donors

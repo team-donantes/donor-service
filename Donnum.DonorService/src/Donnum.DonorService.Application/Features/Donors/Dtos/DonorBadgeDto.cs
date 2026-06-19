@@ -11,12 +11,4 @@ public sealed record DonorBadgeDto(
     DateTime AssignedAt
 )
 {
-    public static DonorBadgeDto FromDonorBadge(DonorBadge donorBadge)
-        => new(
-            Id: donorBadge.Badge.Id,
-            Name: donorBadge.Badge.Name,
-            BadgeType: donorBadge.Badge.BadgeType,
-            BadgePoints: donorBadge.Badge.BadgePoints,
-            AssignedAt: donorBadge.AssignedAt
-        );
 }
