@@ -12,14 +12,16 @@ public sealed class DonationCompletedEventHandler(
 {
     public async Task Handle(DonationCompletedEvent request, CancellationToken cancellationToken)
     {
-        if (!await donorRepository.ExistsAsync(request.DonorId, cancellationToken))
-        {
-            throw new NotFoundException(nameof(Donor), request.DonorId);
-        }
+        var donor = await donorRepository.GetByIdAsync(request.DonorId, cancellationToken)
+            ?? throw new NotFoundException(nameof(Donor), request.DonorId);
 
         var donation = DonationMapper.ToEntity(request);
 
         await donationRepository.AddAsync(donation, cancellationToken);
         await donationRepository.SaveChangesAsync(cancellationToken);
+
+        donor.Points += 100;
+        donorRepository.Update(donor);
+        await donorRepository.SaveChangesAsync(cancellationToken);
     }
 }
