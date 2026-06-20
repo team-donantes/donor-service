@@ -1,5 +1,6 @@
 using Donnum.DonorService.Application.Exceptions;
 using Donnum.DonorService.Application.Features.Donations.Mappers;
+using Donnum.DonorService.Application.Features.Donors.Services;
 using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.Repositories;
 using MediatR;
@@ -8,7 +9,8 @@ namespace Donnum.DonorService.Application.Features.Donations.Events.DonationComp
 
 public sealed class DonationCompletedEventHandler(
     IDonorRepository donorRepository,
-    IDonationRepository donationRepository) : IRequestHandler<DonationCompletedEvent>
+    IDonationRepository donationRepository,
+    IEvaluateAndAssignBadgesService evaluateAndAssignBadgesService) : IRequestHandler<DonationCompletedEvent>
 {
     public async Task Handle(DonationCompletedEvent request, CancellationToken cancellationToken)
     {
@@ -23,5 +25,7 @@ public sealed class DonationCompletedEventHandler(
         donor.Points += 100;
         donorRepository.Update(donor);
         await donorRepository.SaveChangesAsync(cancellationToken);
+
+        await evaluateAndAssignBadgesService.ExecuteAsync(donor.Id, cancellationToken);
     }
 }

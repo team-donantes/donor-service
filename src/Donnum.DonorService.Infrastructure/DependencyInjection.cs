@@ -18,6 +18,7 @@ public static class DependencyInjection
 
         services.AddScoped<IDonorRepository, DonorRepository>();
         services.AddScoped<IDonationRepository, DonationRepository>();
+        services.AddScoped<IBadgeRepository, BadgeRepository>();
 
         services.AddMessageBroker(configuration);
 

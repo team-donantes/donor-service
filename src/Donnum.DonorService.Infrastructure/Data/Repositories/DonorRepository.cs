@@ -42,6 +42,9 @@ public sealed class DonorRepository : IDonorRepository
     public void Update(Donor donor)
         => _context.Donors.Update(donor);
 
+    public async Task AddDonorBadgeAsync(DonorBadge donorBadge, CancellationToken cancellationToken = default)
+        => await _context.DonorBadges.AddAsync(donorBadge, cancellationToken);
+
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         => await _context.SaveChangesAsync(cancellationToken);
 }

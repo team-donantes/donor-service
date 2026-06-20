@@ -15,5 +15,8 @@ public interface IDonorRepository
 
     void Update(Donor donor);
 
+    Task AddDonorBadgeAsync(DonorBadge donorBadge, CancellationToken cancellationToken = default);
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
+

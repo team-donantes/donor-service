@@ -1,5 +1,6 @@
 using System.Reflection;
 using Donnum.DonorService.Application.Behaviors;
+using Donnum.DonorService.Application.Features.Donors.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,8 @@ public static class DependencyInjection
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+
+        services.AddScoped<IEvaluateAndAssignBadgesService, EvaluateAndAssignBadgesService>();
 
         return services;
     }
