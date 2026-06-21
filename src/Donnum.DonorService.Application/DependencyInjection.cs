@@ -19,6 +19,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IEvaluateAndAssignBadgesService, EvaluateAndAssignBadgesService>();
+        services.AddScoped<IReliabilityCalculator, ReliabilityCalculator>();
 
         return services;
     }
