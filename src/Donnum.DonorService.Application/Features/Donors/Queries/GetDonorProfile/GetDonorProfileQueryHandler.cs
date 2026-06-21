@@ -17,7 +17,7 @@ public sealed class GetDonorProfileQueryHandler : IRequestHandler<GetDonorProfil
 
     public async Task<DonorProfileDto> Handle(GetDonorProfileQuery request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetByIdAsync(request.Id, cancellationToken)
+        var donor = await _donorRepository.GetWithReliabilityScoreByIdAsync(request.Id, trackChanges: false, cancellationToken)
             ?? throw new NotFoundException(nameof(Domain.Entities.Donor), request.Id);
 
         return DonorMapper.ToDto(donor);

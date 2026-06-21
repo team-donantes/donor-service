@@ -21,6 +21,18 @@ public static class DonationMapper
         };
     }
 
+    public static Donation ToEntity(Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance.RegisterAttendanceCommand command)
+    {
+        return new Donation
+        {
+            DonorId = command.DonorId,
+            DonationRequestId = command.DonationRequestId,
+            MedicalCenterId = command.MedicalCenterId,
+            DonationDate = command.DonationDate,
+            CreatedAt = DateTime.UtcNow
+        };
+    }
+
     public static DonorDonationHistoryDto MapToDto(Guid donorId, List<Donation> donations)
     {
         return new DonorDonationHistoryDto(

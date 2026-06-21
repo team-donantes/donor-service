@@ -11,6 +11,7 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Donor> Donors => Set<Donor>();
+    public DbSet<ReliabilityScore> ReliabilityScores => Set<ReliabilityScore>();
     public DbSet<Donation> Donations => Set<Donation>();
     public DbSet<DonationRequestParticipation> DonationRequestParticipations => Set<DonationRequestParticipation>();
     public DbSet<Badge> Badges => Set<Badge>();

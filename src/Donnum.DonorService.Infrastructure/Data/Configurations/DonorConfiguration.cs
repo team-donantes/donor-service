@@ -2,6 +2,7 @@ using Donnum.DonorService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Donnum.DonorService.Domain.ValueObjects;
+using Donnum.DonorService.Domain.Enums;
 
 namespace Donnum.DonorService.Infrastructure.Data.Configurations;
 
@@ -15,6 +16,8 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         builder.ToTable("Donors");
 
         builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Gender).IsRequired();
 
         builder.Property(x => x.BloodGroup).HasMaxLength(3).IsRequired();
         builder.Property(x => x.RhFactor).HasMaxLength(15).IsRequired();
@@ -59,6 +62,7 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         {
             Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
             AuthUserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+            Gender = Gender.Male,
             BloodGroup = "O",
             RhFactor = "Positive",
             Street = "Av. Corrientes 1234",
