@@ -27,6 +27,19 @@ public sealed class ReliabilityCalculator : IReliabilityCalculator
             return Math.Max(MinScore, currentScore - AbsencePenalty);
         }
 
+        bool exceededLimits = HasExceededYearlyLimit(gender, donations, donationDate);
+        bool violatesInterval = HasViolatedMinimumInterval(donations, donationDate);
+
+        if (exceededLimits || violatesInterval)
+        {
+            return Math.Max(MinScore, currentScore - UnsafePenalty);
+        }
+
+        return Math.Min(MaxScore, currentScore + SafeReward);
+    }
+
+    private static bool HasExceededYearlyLimit(Gender gender, IReadOnlyList<Donation> donations, DateTime donationDate)
+    {
         var oneYearAgo = donationDate.AddDays(-365);
         var recentDonationsCount = donations.Count(d => d.DonationDate >= oneYearAgo);
 
@@ -37,16 +50,12 @@ public sealed class ReliabilityCalculator : IReliabilityCalculator
             _ => FemaleYearlyLimit // Default safe limit for Unknown or future genders
         };
 
-        bool exceededLimits = recentDonationsCount >= limit;
+        return recentDonationsCount >= limit;
+    }
 
+    private static bool HasViolatedMinimumInterval(IReadOnlyList<Donation> donations, DateTime donationDate)
+    {
         var lastDonation = donations.OrderByDescending(d => d.DonationDate).FirstOrDefault();
-        bool violatesInterval = lastDonation != null && (donationDate - lastDonation.DonationDate).TotalDays < MinimumIntervalDays;
-
-        if (exceededLimits || violatesInterval)
-        {
-            return Math.Max(MinScore, currentScore - UnsafePenalty);
-        }
-
-        return Math.Min(MaxScore, currentScore + SafeReward);
+        return lastDonation != null && (donationDate - lastDonation.DonationDate).TotalDays < MinimumIntervalDays;
     }
 }
