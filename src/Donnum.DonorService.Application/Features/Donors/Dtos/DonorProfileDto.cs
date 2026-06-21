@@ -1,4 +1,5 @@
 using Donnum.DonorService.Domain.Entities;
+using Donnum.DonorService.Domain.Enums;
 
 namespace Donnum.DonorService.Application.Features.Donors.Dtos;
 
@@ -7,7 +8,7 @@ public sealed record DonorProfileDto(
     Guid AuthUserId,
     string BloodGroup,
     string RhFactor,
-    Donnum.DonorService.Domain.Enums.Gender Gender,
+    Gender Gender,
     string? Street,
     string City,
     string Province,

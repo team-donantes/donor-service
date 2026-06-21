@@ -2,6 +2,7 @@ using Donnum.DonorService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Donnum.DonorService.Domain.ValueObjects;
+using Donnum.DonorService.Domain.Enums;
 
 namespace Donnum.DonorService.Infrastructure.Data.Configurations;
 
@@ -61,7 +62,7 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         {
             Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
             AuthUserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-            Gender = Donnum.DonorService.Domain.Enums.Gender.Male,
+            Gender = Gender.Male,
             BloodGroup = "O",
             RhFactor = "Positive",
             Street = "Av. Corrientes 1234",
