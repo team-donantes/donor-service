@@ -4,7 +4,11 @@ using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorBadges;
 using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorProfile;
 using Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
 using Donnum.DonorService.Application.Features.Donors.Mappers;
+using Donnum.DonorService.Application.Features.Donors.Dtos;
+using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorReliability;
+using Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance;
 using Donnum.DonorService.Presentation.API.Contracts;
+using Donnum.DonorService.Presentation.API.Mappers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -78,7 +82,7 @@ public class DonorsController : ControllerBase
         [FromBody] UpdateDonorProfileRequest body,
         CancellationToken cancellationToken)
     {
-        var command = Donnum.DonorService.Presentation.API.Mappers.DonorApiMapper.ToCommand(id, body);
+        var command = DonorApiMapper.ToCommand(id, body);
 
         await _mediator.Send(command, cancellationToken);
         return NoContent();
@@ -92,7 +96,7 @@ public class DonorsController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>200 OK with the DonorProfileDto, or 404 if not found.</returns>
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Application.Features.Donors.Dtos.DonorProfileDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(DonorProfileDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDonorProfile(
         [FromRoute] Guid id,
@@ -110,7 +114,7 @@ public class DonorsController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>200 OK with the list of badges, or 404 if the donor does not exist.</returns>
     [HttpGet("{id:guid}/badges")]
-    [ProducesResponseType(typeof(IReadOnlyList<Application.Features.Donors.Dtos.DonorBadgeDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IReadOnlyList<DonorBadgeDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDonorBadges(
         [FromRoute] Guid id,
@@ -128,13 +132,13 @@ public class DonorsController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>200 OK with reliability details.</returns>
     [HttpGet("{id:guid}/reliability")]
-    [ProducesResponseType(typeof(Application.Features.Donors.Dtos.DonorReliabilityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(DonorReliabilityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDonorReliability(
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        var query = new Application.Features.Donors.Queries.GetDonorReliability.GetDonorReliabilityQuery(id);
+        var query = new GetDonorReliabilityQuery(id);
         var reliability = await _mediator.Send(query, cancellationToken);
         return Ok(reliability);
     }
@@ -156,7 +160,7 @@ public class DonorsController : ControllerBase
         [FromBody] RegisterAttendanceRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new Application.Features.Donors.Commands.RegisterAttendance.RegisterAttendanceCommand(
+        var command = new RegisterAttendanceCommand(
             id,
             request.DonationRequestId,
             request.MedicalCenterId,

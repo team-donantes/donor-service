@@ -47,7 +47,7 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
         }
 
         var newScore = _reliabilityCalculator.CalculateNewScore(
-            donor.ReliabilityScore.Score,
+            donor.ReliabilityScore!.Score,
             donor.Gender,
             existingDonations,
             request.DonationDate,
