@@ -27,4 +27,13 @@ public class Donor : Entity
     public ICollection<DonationRequestParticipation> DonationRequestParticipations { get; set; } = [];
     public ICollection<DonorBadge> DonorBadges { get; set; } = [];
     public ReliabilityScore? ReliabilityScore { get; set; }
+
+    public void UpdateReliabilityScore(int newScore)
+    {
+        if (ReliabilityScore != null)
+        {
+            ReliabilityScore.Score = newScore;
+            ReliabilityScore.LastCalculatedAt = DateTime.UtcNow;
+        }
+    }
 }

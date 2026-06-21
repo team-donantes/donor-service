@@ -16,7 +16,7 @@ public sealed class GetDonorReliabilityQueryHandler : IRequestHandler<GetDonorRe
 
     public async Task<DonorReliabilityDto> Handle(GetDonorReliabilityQuery request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetWithReliabilityScoreByIdAsync(request.DonorId, cancellationToken)
+        var donor = await _donorRepository.GetWithReliabilityScoreByIdAsync(request.DonorId, trackChanges: false, cancellationToken)
             ?? throw new NotFoundException(nameof(Domain.Entities.Donor), request.DonorId);
 
         var score = donor.ReliabilityScore?.Score ?? 100;

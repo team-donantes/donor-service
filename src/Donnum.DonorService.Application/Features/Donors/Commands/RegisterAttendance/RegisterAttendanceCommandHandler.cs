@@ -33,7 +33,7 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
 
     public async Task Handle(RegisterAttendanceCommand request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetWithReliabilityScoreByIdAsync(request.DonorId, cancellationToken)
+        var donor = await _donorRepository.GetWithReliabilityScoreByIdAsync(request.DonorId, trackChanges: true, cancellationToken)
             ?? throw new NotFoundException(nameof(Donor), request.DonorId);
 
         if (donor.ReliabilityScore == null)
@@ -55,14 +55,15 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
             return;
         }
 
-        donor.ReliabilityScore.Score = _reliabilityCalculator.CalculateNewScore(
+        var newScore = _reliabilityCalculator.CalculateNewScore(
             donor.ReliabilityScore.Score,
             donor,
             existingDonations,
             request.DonationDate,
             request.Attended
         );
-        donor.ReliabilityScore.LastCalculatedAt = DateTime.UtcNow;
+
+        donor.UpdateReliabilityScore(newScore);
 
         _donorRepository.Update(donor);
 
