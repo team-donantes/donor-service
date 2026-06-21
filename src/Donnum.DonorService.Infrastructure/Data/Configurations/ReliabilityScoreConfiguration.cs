@@ -18,8 +18,7 @@ public class ReliabilityScoreConfiguration : IEntityTypeConfiguration<Reliabilit
         builder.Property(x => x.LastCalculatedAt)
             .IsRequired();
 
-        // The relationship is mapped from DonorConfiguration side, but we can do it here too.
-        // It's cleaner to map it here since this is the dependent entity.
+
         builder.HasOne(x => x.Donor)
             .WithOne(x => x.ReliabilityScore)
             .HasForeignKey<ReliabilityScore>(x => x.DonorId)

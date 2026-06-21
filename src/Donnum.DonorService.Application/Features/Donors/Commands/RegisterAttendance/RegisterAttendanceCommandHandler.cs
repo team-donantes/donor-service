@@ -8,6 +8,7 @@ using Donnum.DonorService.Application.Exceptions;
 using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.Enums;
 using Donnum.DonorService.Domain.Repositories;
+using Donnum.DonorService.Application.Features.Donations.Mappers;
 using MediatR;
 
 namespace Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance;
@@ -36,22 +37,12 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
         var donor = await _donorRepository.GetWithReliabilityScoreByIdAsync(request.DonorId, trackChanges: true, cancellationToken)
             ?? throw new NotFoundException(nameof(Donor), request.DonorId);
 
-        if (donor.ReliabilityScore == null)
-        {
-            donor.ReliabilityScore = new ReliabilityScore
-            {
-                DonorId = donor.Id,
-                Score = 100,
-                LastCalculatedAt = DateTime.UtcNow
-            };
-            await _donorRepository.AddReliabilityScoreAsync(donor.ReliabilityScore, cancellationToken);
-        }
+        await EnsureReliabilityScoreExistsAsync(donor, cancellationToken);
 
         var existingDonations = await _donationRepository.GetByDonorIdAsync(donor.Id, cancellationToken);
 
         if (request.Attended && existingDonations.Any(d => d.DonationRequestId == request.DonationRequestId))
         {
-            // Already registered for this request
             return;
         }
 
@@ -69,14 +60,7 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
 
         if (request.Attended)
         {
-            var donation = new Donation
-            {
-                DonorId = donor.Id,
-                DonationRequestId = request.DonationRequestId,
-                MedicalCenterId = request.MedicalCenterId,
-                DonationDate = request.DonationDate,
-                CreatedAt = DateTime.UtcNow
-            };
+            var donation = DonationMapper.ToEntity(request);
 
             await _donationRepository.AddAsync(donation, cancellationToken);
         }
@@ -103,6 +87,20 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
             };
 
             await _eventBus.PublishAsync(messageEnvelope, cancellationToken);
+        }
+    }
+
+    private async Task EnsureReliabilityScoreExistsAsync(Donor donor, CancellationToken cancellationToken)
+    {
+        if (donor.ReliabilityScore == null)
+        {
+            donor.ReliabilityScore = new ReliabilityScore
+            {
+                DonorId = donor.Id,
+                Score = 100,
+                LastCalculatedAt = DateTime.UtcNow
+            };
+            await _donorRepository.AddReliabilityScoreAsync(donor.ReliabilityScore, cancellationToken);
         }
     }
 }
