@@ -120,4 +120,51 @@ public class DonorsController : ControllerBase
         var badges = await _mediator.Send(query, cancellationToken);
         return Ok(badges);
     }
+
+    /// <summary>
+    /// Retrieves the reliability score details for a specific donor.
+    /// </summary>
+    /// <param name="id">Donor identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with reliability details.</returns>
+    [HttpGet("{id:guid}/reliability")]
+    [ProducesResponseType(typeof(Application.Features.Donors.Dtos.DonorReliabilityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDonorReliability(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new Application.Features.Donors.Queries.GetDonorReliability.GetDonorReliabilityQuery(id);
+        var reliability = await _mediator.Send(query, cancellationToken);
+        return Ok(reliability);
+    }
+
+    /// <summary>
+    /// Registers the attendance of a donor to a donation center and updates their reliability score.
+    /// If attended is true, it publishes a donor.donation.registered event.
+    /// </summary>
+    /// <param name="id">Donor identifier.</param>
+    /// <param name="request">Attendance registration request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>204 No Content on success.</returns>
+    [HttpPost("{id:guid}/attendance")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RegisterAttendance(
+        [FromRoute] Guid id,
+        [FromBody] RegisterAttendanceRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new Application.Features.Donors.Commands.RegisterAttendance.RegisterAttendanceCommand(
+            id,
+            request.DonationRequestId,
+            request.MedicalCenterId,
+            request.DonationDate,
+            request.Attended
+        );
+
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
 }

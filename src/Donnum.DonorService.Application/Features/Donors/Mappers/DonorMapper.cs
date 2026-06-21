@@ -10,9 +10,11 @@ namespace Donnum.DonorService.Application.Features.Donors.Mappers;
 public static class DonorMapper
 {
     public static Donor ToEntity(CreateDonorProfileCommand command)
-        => new Donor
+    {
+        var donor = new Donor
         {
             AuthUserId = command.AuthUserId,
+            Gender = command.Gender,
             BloodGroup = command.BloodGroup.Trim().ToUpperInvariant(),
             RhFactor = command.RhFactor.Trim(),
             Street = command.Street?.Trim(),
@@ -23,6 +25,15 @@ public static class DonorMapper
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
+
+        donor.ReliabilityScore = new ReliabilityScore
+        {
+            Score = 100,
+            LastCalculatedAt = DateTime.UtcNow
+        };
+
+        return donor;
+    }
 
     public static void ApplyUpdate(UpdateDonorProfileCommand command, Donor donor)
     {
@@ -39,12 +50,14 @@ public static class DonorMapper
             AuthUserId: donor.AuthUserId,
             BloodGroup: donor.BloodGroup,
             RhFactor: donor.RhFactor,
+            Gender: donor.Gender,
             Street: donor.Street,
             City: donor.City,
             Province: donor.Province,
             Latitude: donor.Location.Latitude,
             Longitude: donor.Location.Longitude,
             Points: donor.Points,
+            Reliability: donor.ReliabilityScore?.Score ?? 100,
             CreatedAt: donor.CreatedAt,
             UpdatedAt: donor.UpdatedAt
         );

@@ -36,8 +36,17 @@ public sealed class DonorRepository : IDonorRepository
             .AsNoTracking()
             .AnyAsync(d => d.AuthUserId == authUserId, cancellationToken);
 
+    public async Task<Donor?> GetWithReliabilityScoreByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        => await _context.Donors
+            .AsNoTracking()
+            .Include(d => d.ReliabilityScore)
+            .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+
     public async Task AddAsync(Donor donor, CancellationToken cancellationToken = default)
         => await _context.Donors.AddAsync(donor, cancellationToken);
+
+    public async Task AddReliabilityScoreAsync(ReliabilityScore score, CancellationToken cancellationToken = default)
+        => await _context.ReliabilityScores.AddAsync(score, cancellationToken);
 
     public void Update(Donor donor)
         => _context.Donors.Update(donor);

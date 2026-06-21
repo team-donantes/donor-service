@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\Donnum.DonorService.Domain\Donnum.DonorService.Domain.csproj" />
@@ -13,6 +13,11 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <DonnumBuildingBlocksPath>..\..\..\building-blocks</DonnumBuildingBlocksPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(DonnumBuildingBlocksPath)\BuildingBlocks.Messaging\Donnum.BuildingBlocks.Messaging.csproj" />
+  </ItemGroup>
 
 </Project>

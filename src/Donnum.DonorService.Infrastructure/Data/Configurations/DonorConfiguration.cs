@@ -16,6 +16,8 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Gender).IsRequired();
+
         builder.Property(x => x.BloodGroup).HasMaxLength(3).IsRequired();
         builder.Property(x => x.RhFactor).HasMaxLength(15).IsRequired();
         builder.Property(x => x.Street).HasMaxLength(255).IsRequired(false);
@@ -59,6 +61,7 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         {
             Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
             AuthUserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+            Gender = Donnum.DonorService.Domain.Enums.Gender.Male,
             BloodGroup = "O",
             RhFactor = "Positive",
             Street = "Av. Corrientes 1234",

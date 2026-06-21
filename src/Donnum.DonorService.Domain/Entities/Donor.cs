@@ -3,11 +3,14 @@ using System.Collections.Generic;
 
 using Donnum.DonorService.Domain.Common;
 using Donnum.DonorService.Domain.ValueObjects;
+using Donnum.DonorService.Domain.Enums;
+
 namespace Donnum.DonorService.Domain.Entities;
 
 public class Donor : Entity
 {
     public Guid AuthUserId { get; set; }
+    public Gender Gender { get; set; }
 
     public string BloodGroup { get; set; } = string.Empty;
     public string RhFactor { get; set; } = string.Empty;
@@ -23,4 +26,5 @@ public class Donor : Entity
     public ICollection<Donation> Donations { get; set; } = [];
     public ICollection<DonationRequestParticipation> DonationRequestParticipations { get; set; } = [];
     public ICollection<DonorBadge> DonorBadges { get; set; } = [];
+    public ReliabilityScore? ReliabilityScore { get; set; }
 }
