@@ -38,7 +38,6 @@ public sealed class DonorRepository : IDonorRepository
 
     public async Task<Donor?> GetWithReliabilityScoreByIdAsync(Guid id, CancellationToken cancellationToken = default)
         => await _context.Donors
-            .AsNoTracking()
             .Include(d => d.ReliabilityScore)
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
