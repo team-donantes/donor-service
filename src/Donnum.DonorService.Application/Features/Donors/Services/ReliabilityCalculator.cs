@@ -20,7 +20,7 @@ public sealed class ReliabilityCalculator : IReliabilityCalculator
     private const int MaleYearlyLimit = 4;
     private const int FemaleYearlyLimit = 3;
 
-    public int CalculateNewScore(int currentScore, Donor donor, IReadOnlyList<Donation> donations, DateTime donationDate, bool attended)
+    public int CalculateNewScore(int currentScore, Gender gender, IReadOnlyList<Donation> donations, DateTime donationDate, bool attended)
     {
         if (!attended)
         {
@@ -30,7 +30,14 @@ public sealed class ReliabilityCalculator : IReliabilityCalculator
         var oneYearAgo = donationDate.AddDays(-365);
         var recentDonationsCount = donations.Count(d => d.DonationDate >= oneYearAgo);
 
-        bool exceededLimits = donor.Gender == Gender.Male ? recentDonationsCount >= MaleYearlyLimit : recentDonationsCount >= FemaleYearlyLimit;
+        int limit = gender switch
+        {
+            Gender.Male => MaleYearlyLimit,
+            Gender.Female => FemaleYearlyLimit,
+            _ => FemaleYearlyLimit // Default safe limit for Unknown or future genders
+        };
+
+        bool exceededLimits = recentDonationsCount >= limit;
 
         var lastDonation = donations.OrderByDescending(d => d.DonationDate).FirstOrDefault();
         bool violatesInterval = lastDonation != null && (donationDate - lastDonation.DonationDate).TotalDays < MinimumIntervalDays;
