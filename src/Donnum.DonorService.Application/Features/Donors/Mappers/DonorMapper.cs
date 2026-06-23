@@ -40,7 +40,6 @@ public static class DonorMapper
         donor.Street = command.Street?.Trim();
         donor.City = command.City.Trim();
         donor.Province = command.Province.Trim();
-        donor.Location = new Location(command.Latitude, command.Longitude);
         donor.UpdatedAt = DateTime.UtcNow;
     }
 

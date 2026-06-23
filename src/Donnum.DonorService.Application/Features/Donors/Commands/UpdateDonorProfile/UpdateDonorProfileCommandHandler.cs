@@ -21,6 +21,20 @@ public sealed class UpdateDonorProfileCommandHandler : IRequestHandler<UpdateDon
 
         DonorMapper.ApplyUpdate(request, donor);
 
+        try 
+        {
+            var locations = await Microsoft.Maui.Devices.Sensors.Geocoding.Default.GetLocationsAsync($"{request.Street}, {request.City}, {request.Province}");
+            var location = locations?.FirstOrDefault();
+            if (location != null)
+            {
+                donor.Location = new Domain.ValueObjects.Location((decimal)location.Latitude, (decimal)location.Longitude);
+            }
+        } 
+        catch (Exception)
+        {
+        
+        }
+
         _donorRepository.Update(donor);
         await _donorRepository.SaveChangesAsync(cancellationToken);
     }
