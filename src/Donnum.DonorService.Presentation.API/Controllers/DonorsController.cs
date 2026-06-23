@@ -7,6 +7,7 @@ using Donnum.DonorService.Application.Features.Donors.Mappers;
 using Donnum.DonorService.Application.Features.Donors.Dtos;
 using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorReliability;
 using Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance;
+using Donnum.DonorService.Application.Features.Donors.Queries.GetDonorsByRequest;
 using Donnum.DonorService.Presentation.API.Contracts;
 using Donnum.DonorService.Presentation.API.Mappers;
 using MediatR;
@@ -170,5 +171,22 @@ public class DonorsController : ControllerBase
 
         await _mediator.Send(command, cancellationToken);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Retrieves a list of donors enrolled in a specific request.
+    /// </summary>
+    /// <param name="requestId">Request identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the list of enrolled donors.</returns>
+    [HttpGet("by-request/{requestId:guid}")]
+    [ProducesResponseType(typeof(IReadOnlyList<DonorProfileDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetDonorsByRequest(
+        [FromRoute] Guid requestId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetDonorsByRequestQuery(requestId);
+        var result = await _mediator.Send(query, cancellationToken);
+        return Ok(result);
     }
 }
