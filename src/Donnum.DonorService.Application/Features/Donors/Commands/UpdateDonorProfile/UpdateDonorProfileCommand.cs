@@ -6,7 +6,5 @@ public sealed record UpdateDonorProfileCommand(
     Guid Id,
     string? Street,
     string City,
-    string Province,
-    decimal Latitude,
-    decimal Longitude
+    string Province
 ) : IRequest;

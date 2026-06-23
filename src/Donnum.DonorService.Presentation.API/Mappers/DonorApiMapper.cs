@@ -10,8 +10,6 @@ public static class DonorApiMapper
             Id: id,
             Street: request.Street,
             City: request.City,
-            Province: request.Province,
-            Latitude: request.Latitude,
-            Longitude: request.Longitude
+            Province: request.Province
         );
 }
