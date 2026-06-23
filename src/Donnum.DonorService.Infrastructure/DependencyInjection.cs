@@ -2,7 +2,7 @@ using Donnum.BuildingBlocks.Messaging;
 using Donnum.DonorService.Domain.Repositories;
 using Donnum.DonorService.Infrastructure.Data;
 using Donnum.DonorService.Infrastructure.Data.Repositories;
-using Donnum.DonorService.Infrastructure.Messaging;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,11 +21,6 @@ public static class DependencyInjection
         services.AddScoped<IBadgeRepository, BadgeRepository>();
 
         services.AddMessageBroker(configuration);
-
-        services.Configure<DonationCompletedEventSubscriptionOptions>(
-            configuration.GetSection(DonationCompletedEventSubscriptionOptions.SectionName));
-        services.AddSingleton<DonationCompletedMessageConsumer>();
-        services.AddHostedService(provider => provider.GetRequiredService<DonationCompletedMessageConsumer>());
 
         return services;
     }
