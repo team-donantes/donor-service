@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 // Register Layer Dependencies
 builder.Services.AddApplicationServices();
@@ -29,6 +30,8 @@ if (app.Environment.IsDevelopment())
         options.WithTitle("Donnum API");
         options.WithTheme(ScalarTheme.Mars);
     });
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseExceptionHandler();

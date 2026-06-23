@@ -22,10 +22,17 @@ public sealed class DonationCompletedMessageConsumer(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        try
+        {
         _subscription = await subscriber.SubscribeAsync(
             options.Value.ToEventSubscriptionOptions(),
             HandleMessageAsync,
             stoppingToken);
+        }
+        catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
+        {
+            Console.WriteLine($"[WARNING] No se pudo conectar a RabbitMQ al iniciar: {ex.Message}");
+        }
 
         await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken);
     }
