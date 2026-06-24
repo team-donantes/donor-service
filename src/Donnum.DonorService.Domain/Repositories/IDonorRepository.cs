@@ -11,8 +11,6 @@ public interface IDonorRepository
 
     Task<bool> ExistsByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default);
 
-    Task<Donor?> GetByAuthUserIdAsync(Guid authUserId, CancellationToken cancellationToken = default);
-
     Task<IReadOnlyList<Donor>> GetDonorsByRequestIdAsync(Guid requestId, CancellationToken cancellationToken = default);
 
     Task<Donor?> GetWithReliabilityScoreByIdAsync(Guid id, bool trackChanges = false, CancellationToken cancellationToken = default);
