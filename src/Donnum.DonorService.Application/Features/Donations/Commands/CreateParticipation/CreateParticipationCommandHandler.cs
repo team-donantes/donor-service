@@ -18,20 +18,24 @@ public sealed class CreateParticipationCommandHandler : IRequestHandler<CreatePa
         var existingParticipation = await _donationRepository.GetParticipationAsync(request.DonorId, request.DonationRequestId, cancellationToken);
         if (existingParticipation != null)
         {
-            throw new InvalidOperationException("Donor is already participating in this request.");
+            existingParticipation.Status = request.Status;
+            existingParticipation.UpdatedAt = DateTime.UtcNow;
+        }
+        else
+        {
+            var participation = new DonationRequestParticipation
+            {
+                DonorId = request.DonorId,
+                DonationRequestId = request.DonationRequestId,
+                Status = request.Status,
+                RegisteredAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await _donationRepository.AddParticipationAsync(participation, cancellationToken);
         }
 
-        var participation = new DonationRequestParticipation
-        {
-            DonorId = request.DonorId,
-            DonationRequestId = request.DonationRequestId,
-            Status = request.Status,
-            RegisteredAt = DateTime.UtcNow,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        await _donationRepository.AddParticipationAsync(participation, cancellationToken);
         await _donationRepository.SaveChangesAsync(cancellationToken);
     }
 }
