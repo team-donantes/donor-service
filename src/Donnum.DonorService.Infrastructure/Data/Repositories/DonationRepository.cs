@@ -19,5 +19,14 @@ public class DonationRepository(ApplicationDbContext context) : IDonationReposit
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)
         => context.SaveChangesAsync(cancellationToken);
+
+    public async Task AddParticipationAsync(DonationRequestParticipation participation, CancellationToken cancellationToken = default)
+        => await context.DonationRequestParticipations.AddAsync(participation, cancellationToken);
+
+    public async Task<DonationRequestParticipation?> GetParticipationAsync(Guid donorId, Guid requestId, CancellationToken cancellationToken = default)
+    {
+        return await context.DonationRequestParticipations
+            .FirstOrDefaultAsync(p => p.DonorId == donorId && p.DonationRequestId == requestId, cancellationToken);
+    }
 }
 
