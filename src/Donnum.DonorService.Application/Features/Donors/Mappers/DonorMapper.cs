@@ -38,6 +38,7 @@ public static class DonorMapper
     public static void ApplyUpdate(UpdateDonorProfileCommand command, Donor donor)
     {
         donor.Street = command.Street?.Trim();
+        donor.Phone = command.Phone?.Trim();
         donor.City = command.City.Trim();
         donor.Province = command.Province.Trim();
         donor.UpdatedAt = DateTime.UtcNow;
@@ -51,6 +52,7 @@ public static class DonorMapper
             RhFactor: donor.RhFactor,
             Gender: donor.Gender,
             Street: donor.Street,
+            Phone: donor.Phone,
             City: donor.City,
             Province: donor.Province,
             Latitude: donor.Location.Latitude,
