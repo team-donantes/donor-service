@@ -273,6 +273,11 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                     b.Property<Guid>("AuthUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("BloodGroup")
                         .IsRequired()
                         .HasMaxLength(3)
@@ -310,11 +315,21 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                     b.Property<bool>("IsPregnant")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Province")
                         .IsRequired()
@@ -353,6 +368,7 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                             BloodGroup = "O",
                             City = "Buenos Aires",
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FirstName = "Donante",
                             Gender = 1,
                             HasGuardianAuthorization = true,
                             HasMedicalRestriction = false,
@@ -360,6 +376,8 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                             IsDeleted = false,
                             IsHealthy = true,
                             IsPregnant = false,
+                            LastName = "Demo",
+                            PhoneNumber = "+5491155550101",
                             Points = 0,
                             Province = "Buenos Aires",
                             RhFactor = "Positive",

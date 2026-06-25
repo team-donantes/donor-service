@@ -10,6 +10,9 @@ namespace Donnum.DonorService.Domain.Entities;
 public class Donor : Entity
 {
     public Guid AuthUserId { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; } = string.Empty;
     public Gender Gender { get; set; }
     public int Age { get; set; }
     public decimal WeightKg { get; set; }

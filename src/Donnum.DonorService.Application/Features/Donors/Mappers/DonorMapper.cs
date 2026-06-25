@@ -14,6 +14,9 @@ public static class DonorMapper
         var donor = new Donor
         {
             AuthUserId = command.AuthUserId,
+            FirstName = command.FirstName.Trim(),
+            LastName = command.LastName.Trim(),
+            PhoneNumber = command.PhoneNumber.Trim(),
             Gender = command.Gender,
             Age = command.Age,
             WeightKg = command.WeightKg,
@@ -54,6 +57,9 @@ public static class DonorMapper
         => new(
             Id: donor.Id,
             AuthUserId: donor.AuthUserId,
+            FirstName: donor.FirstName,
+            LastName: donor.LastName,
+            PhoneNumber: donor.PhoneNumber,
             BloodGroup: donor.BloodGroup,
             RhFactor: donor.RhFactor,
             Gender: donor.Gender,

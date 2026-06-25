@@ -6,6 +6,9 @@ namespace Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorPr
 
 public sealed record CreateDonorProfileCommand(
     Guid AuthUserId,
+    string FirstName,
+    string LastName,
+    string PhoneNumber,
     string BloodGroup,
     string RhFactor,
     Gender Gender,
