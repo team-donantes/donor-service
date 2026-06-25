@@ -35,13 +35,6 @@ public sealed class AddDonorContact : Migration
             maxLength: 20,
             nullable: false,
             defaultValue: "");
-
-        migrationBuilder.UpdateData(
-            table: "Donors",
-            keyColumn: "Id",
-            keyValue: new Guid("11111111-1111-1111-1111-111111111111"),
-            columns: ["FirstName", "LastName", "PhoneNumber"],
-            values: ["Donante", "Demo", "+5491155550101"]);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
