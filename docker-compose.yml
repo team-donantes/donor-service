@@ -14,7 +14,7 @@ services:
       - Messaging__Broker__Port=5672
       - Messaging__Broker__UserName=guest
       - Messaging__Broker__Password=guest
-      - Messaging__Broker__ExchangeName=donnum.events
+      - Messaging__Broker__ExchangeName=donor.events
     networks:
       - donnum-shared
     depends_on:

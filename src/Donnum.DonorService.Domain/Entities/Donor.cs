@@ -11,6 +11,13 @@ public class Donor : Entity
 {
     public Guid AuthUserId { get; set; }
     public Gender Gender { get; set; }
+    public int Age { get; set; }
+    public decimal WeightKg { get; set; }
+    public bool IsHealthy { get; set; } = true;
+    public bool IsPregnant { get; set; }
+    public bool HasGuardianAuthorization { get; set; }
+    public bool HasRecentTattooOrPiercing { get; set; }
+    public bool HasMedicalRestriction { get; set; }
 
     public string BloodGroup { get; set; } = string.Empty;
     public string RhFactor { get; set; } = string.Empty;

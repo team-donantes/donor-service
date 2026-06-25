@@ -15,6 +15,13 @@ public static class DonorMapper
         {
             AuthUserId = command.AuthUserId,
             Gender = command.Gender,
+            Age = command.Age,
+            WeightKg = command.WeightKg,
+            IsHealthy = command.IsHealthy,
+            IsPregnant = command.IsPregnant,
+            HasGuardianAuthorization = command.HasGuardianAuthorization,
+            HasRecentTattooOrPiercing = command.HasRecentTattooOrPiercing,
+            HasMedicalRestriction = command.HasMedicalRestriction,
             BloodGroup = command.BloodGroup.Trim().ToUpperInvariant(),
             RhFactor = command.RhFactor.Trim(),
             Street = command.Street?.Trim(),

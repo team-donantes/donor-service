@@ -28,5 +28,9 @@ public class DonationRepository(ApplicationDbContext context) : IDonationReposit
         return await context.DonationRequestParticipations
             .FirstOrDefaultAsync(p => p.DonorId == donorId && p.DonationRequestId == requestId, cancellationToken);
     }
-}
 
+    public Task<bool> IsCampaignRequestAsync(Guid requestId, CancellationToken cancellationToken = default) =>
+        context.BloodRequestProjections.AnyAsync(
+            request => request.Id == requestId && request.RequestType == "Campaign",
+            cancellationToken);
+}
