@@ -24,6 +24,7 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         builder.Property(x => x.Street).HasMaxLength(255).IsRequired(false);
         builder.Property(x => x.City).HasMaxLength(100).IsRequired();
         builder.Property(x => x.Province).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Phone).HasMaxLength(20).IsRequired(false);
 
         builder.OwnsOne(x => x.Location, l =>
         {

@@ -15,6 +15,7 @@ public class Donor : Entity
     public string BloodGroup { get; set; } = string.Empty;
     public string RhFactor { get; set; } = string.Empty;
 
+    public string? Phone { get; set; }
     public string? Street { get; set; }
     public string City { get; set; } = string.Empty;
     public string Province { get; set; } = string.Empty;

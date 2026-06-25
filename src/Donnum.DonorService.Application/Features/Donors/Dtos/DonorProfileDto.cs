@@ -10,6 +10,7 @@ public sealed record DonorProfileDto(
     string RhFactor,
     Gender Gender,
     string? Street,
+    string? Phone,
     string City,
     string Province,
     decimal Latitude,
