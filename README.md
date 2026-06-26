@@ -120,7 +120,7 @@ El servicio utiliza `Donnum.BuildingBlocks` para la integración asincrónica co
     "UserName": "",
     "Password": "",
     "VirtualHost": "/",
-    "ExchangeName": "donnum.events",
+    "ExchangeName": "donor.events",
     "ClientProvidedName": "donnum-donor-service"
   }
 }

@@ -1,21 +1,19 @@
-version: '3.8'
-
 services:
   donnum-api:
+    container_name: donnum-donor-service
     build:
-      context: ../..
-      dockerfile: donor-service/Donnum.DonorService/Dockerfile
+      context: ..
+      dockerfile: donor-service/Dockerfile
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "8082:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=DonnumDonorService;User Id=sa;Password=${SQLSERVER_SA_PASSWORD:-Your_password123};TrustServerCertificate=True;
       - Messaging__Broker__HostName=donnum-message-broker
       - Messaging__Broker__Port=5672
-      - Messaging__Broker__UserName=${MESSAGING_BROKER_USERNAME}
-      - Messaging__Broker__Password=${MESSAGING_BROKER_PASSWORD}
-      - Messaging__Broker__ExchangeName=donnum.events
+      - Messaging__Broker__UserName=guest
+      - Messaging__Broker__Password=guest
+      - Messaging__Broker__ExchangeName=donor.events
     networks:
       - donnum-shared
 

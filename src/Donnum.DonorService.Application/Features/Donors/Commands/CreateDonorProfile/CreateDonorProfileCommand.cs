@@ -6,6 +6,9 @@ namespace Donnum.DonorService.Application.Features.Donors.Commands.CreateDonorPr
 
 public sealed record CreateDonorProfileCommand(
     Guid AuthUserId,
+    string FirstName,
+    string LastName,
+    string PhoneNumber,
     string BloodGroup,
     string RhFactor,
     Gender Gender,
@@ -13,5 +16,12 @@ public sealed record CreateDonorProfileCommand(
     string City,
     string Province,
     decimal Latitude,
-    decimal Longitude
+    decimal Longitude,
+    int Age = 18,
+    decimal WeightKg = 50,
+    bool IsHealthy = true,
+    bool IsPregnant = false,
+    bool HasGuardianAuthorization = true,
+    bool HasRecentTattooOrPiercing = false,
+    bool HasMedicalRestriction = false
 ) : IRequest<Guid>;

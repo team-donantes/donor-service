@@ -14,7 +14,17 @@ public static class DonorMapper
         var donor = new Donor
         {
             AuthUserId = command.AuthUserId,
+            FirstName = command.FirstName.Trim(),
+            LastName = command.LastName.Trim(),
+            PhoneNumber = command.PhoneNumber.Trim(),
             Gender = command.Gender,
+            Age = command.Age,
+            WeightKg = command.WeightKg,
+            IsHealthy = command.IsHealthy,
+            IsPregnant = command.IsPregnant,
+            HasGuardianAuthorization = command.HasGuardianAuthorization,
+            HasRecentTattooOrPiercing = command.HasRecentTattooOrPiercing,
+            HasMedicalRestriction = command.HasMedicalRestriction,
             BloodGroup = command.BloodGroup.Trim().ToUpperInvariant(),
             RhFactor = command.RhFactor.Trim(),
             Street = command.Street?.Trim(),
@@ -38,9 +48,9 @@ public static class DonorMapper
     public static void ApplyUpdate(UpdateDonorProfileCommand command, Donor donor)
     {
         donor.Street = command.Street?.Trim();
+        donor.Phone = command.Phone?.Trim();
         donor.City = command.City.Trim();
         donor.Province = command.Province.Trim();
-        donor.Location = new Location(command.Latitude, command.Longitude);
         donor.UpdatedAt = DateTime.UtcNow;
     }
 
@@ -48,10 +58,14 @@ public static class DonorMapper
         => new(
             Id: donor.Id,
             AuthUserId: donor.AuthUserId,
+            FirstName: donor.FirstName,
+            LastName: donor.LastName,
+            PhoneNumber: donor.PhoneNumber,
             BloodGroup: donor.BloodGroup,
             RhFactor: donor.RhFactor,
             Gender: donor.Gender,
             Street: donor.Street,
+            Phone: donor.Phone,
             City: donor.City,
             Province: donor.Province,
             Latitude: donor.Location.Latitude,

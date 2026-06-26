@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Donnum.DonorService.Application.Features.Donations.Events.DonationCompleted;
+
 using Donnum.DonorService.Application.Features.Donations.Queries.GetDonationHistory;
 using Donnum.DonorService.Domain.Entities;
 
@@ -9,18 +9,6 @@ namespace Donnum.DonorService.Application.Features.Donations.Mappers;
 
 public static class DonationMapper
 {
-    public static Donation ToEntity(DonationCompletedEvent @event)
-    {
-        return new Donation
-        {
-            DonorId = @event.DonorId,
-            DonationRequestId = @event.DonationRequestId,
-            MedicalCenterId = @event.MedicalCenterId,
-            DonationDate = @event.DonationDate,
-            CreatedAt = @event.CreatedAt
-        };
-    }
-
     public static Donation ToEntity(Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance.RegisterAttendanceCommand command)
     {
         return new Donation

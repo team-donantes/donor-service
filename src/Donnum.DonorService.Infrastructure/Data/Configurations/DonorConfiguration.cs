@@ -17,13 +17,18 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.FirstName).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.LastName).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.PhoneNumber).HasMaxLength(20).IsRequired();
         builder.Property(x => x.Gender).IsRequired();
+        builder.Property(x => x.WeightKg).HasPrecision(6, 2);
 
         builder.Property(x => x.BloodGroup).HasMaxLength(3).IsRequired();
         builder.Property(x => x.RhFactor).HasMaxLength(15).IsRequired();
         builder.Property(x => x.Street).HasMaxLength(255).IsRequired(false);
         builder.Property(x => x.City).HasMaxLength(100).IsRequired();
         builder.Property(x => x.Province).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Phone).HasMaxLength(20).IsRequired(false);
 
         builder.OwnsOne(x => x.Location, l =>
         {
@@ -62,7 +67,17 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
         {
             Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
             AuthUserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+            FirstName = "Donante",
+            LastName = "Demo",
+            PhoneNumber = "+5491155550101",
             Gender = Gender.Male,
+            Age = 30,
+            WeightKg = 75m,
+            IsHealthy = true,
+            IsPregnant = false,
+            HasGuardianAuthorization = true,
+            HasRecentTattooOrPiercing = false,
+            HasMedicalRestriction = false,
             BloodGroup = "O",
             RhFactor = "Positive",
             Street = "Av. Corrientes 1234",
