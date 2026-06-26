@@ -2,6 +2,15 @@
 
 Microservicio responsable de la gestión del ciclo de vida de los donantes dentro de la plataforma de donación de sangre.
 
+## SQL Server en Docker
+
+La infraestructura compartida debe iniciarse primero desde `building-blocks` con
+`docker compose up -d --wait sqlserver rabbitmq` y luego
+`docker compose run --rm sqlserver-init`. Este servicio usa la base `DonnumDonorService` y se conecta
+desde Docker a `sqlserver,1433`; `localhost,1433` se reserva para conexiones realizadas
+desde la maquina host. Solo el SQL Server compartido publica `1433:1433`; esta API no
+expone el puerto de base de datos.
+
 ## Propósito
 
 Este servicio centraliza toda la información asociada a un donante y actúa como fuente de verdad para:
@@ -78,7 +87,7 @@ src/
 * .NET 10
 * ASP.NET Core
 * Entity Framework Core
-* PostgreSQL
+* SQL Server
 * RabbitMQ
 * Docker
 * Swagger/OpenAPI
@@ -136,8 +145,8 @@ El servicio utiliza `Donnum.BuildingBlocks` para la integración asincrónica co
 
 ### Requisitos
 
-* .NET 8 SDK
-* PostgreSQL
+* .NET 10 SDK
+* SQL Server
 * Docker (opcional)
 
 ### Restaurar dependencias
