@@ -10,8 +10,6 @@ namespace Donnum.DonorService.Domain.Entities;
 public class Donor : Entity
 {
     public Guid AuthUserId { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public Gender Gender { get; set; }
     public int Age { get; set; }
@@ -25,7 +23,6 @@ public class Donor : Entity
     public string BloodGroup { get; set; } = string.Empty;
     public string RhFactor { get; set; } = string.Empty;
 
-    public string? Phone { get; set; }
     public string? Street { get; set; }
     public string City { get; set; } = string.Empty;
     public string Province { get; set; } = string.Empty;

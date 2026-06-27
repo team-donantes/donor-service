@@ -9,7 +9,7 @@ public static class DonorApiMapper
         => new UpdateDonorProfileCommand(
             Id: id,
             Street: request.Street,
-            Phone: request.Phone,
+            PhoneNumber: request.PhoneNumber,
             City: request.City,
             Province: request.Province
         );

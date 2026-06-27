@@ -45,8 +45,6 @@ public sealed class CreateDonorProfileCommandHandler : IRequestHandler<CreateDon
                 OccurredAt = DateTimeOffset.UtcNow,
                 DonorId = donor.Id,
                 donor.AuthUserId,
-                donor.FirstName,
-                donor.LastName,
                 donor.PhoneNumber,
                 BloodType = $"{donor.BloodGroup}{(donor.RhFactor == "+" || donor.RhFactor.StartsWith("P", StringComparison.OrdinalIgnoreCase) ? "+" : "-")}",
                 Gender = donor.Gender.ToString(),
