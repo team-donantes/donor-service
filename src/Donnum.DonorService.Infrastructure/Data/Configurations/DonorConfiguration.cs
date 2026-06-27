@@ -40,6 +40,12 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
                 DonorId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 Latitude = -34.6037m,
                 Longitude = -58.3816m
+            },
+            new
+            {
+                DonorId = Guid.Parse("d0000000-d000-d000-d000-d00000000001"),
+                Latitude = -34.6137m,
+                Longitude = -58.3916m
             });
         });
 
@@ -84,6 +90,31 @@ public class DonorConfiguration : IEntityTypeConfiguration<Donor>
             City = "Buenos Aires",
             Province = "Buenos Aires",
             Points = 0,
+            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            IsDeleted = false
+        },
+        new
+        {
+            Id = Guid.Parse("d0000000-d000-d000-d000-d00000000001"),
+            AuthUserId = Guid.Parse("f9faea36-22f2-42dc-934c-fc5910baa012"),
+            FirstName = "Test",
+            LastName = "Donor",
+            PhoneNumber = "+5491155550102",
+            Gender = Gender.Female,
+            Age = 25,
+            WeightKg = 65m,
+            IsHealthy = true,
+            IsPregnant = false,
+            HasGuardianAuthorization = true,
+            HasRecentTattooOrPiercing = false,
+            HasMedicalRestriction = false,
+            BloodGroup = "A",
+            RhFactor = "Positive",
+            Street = "Av. Santa Fe 1234",
+            City = "Buenos Aires",
+            Province = "Buenos Aires",
+            Points = 50,
             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             IsDeleted = false
