@@ -29,6 +29,14 @@ public class DonationRepository(ApplicationDbContext context) : IDonationReposit
             .FirstOrDefaultAsync(p => p.DonorId == donorId && p.DonationRequestId == requestId, cancellationToken);
     }
 
+    public async Task<List<DonationRequestParticipation>> GetParticipationsByDonorIdAsync(Guid donorId, CancellationToken cancellationToken = default)
+    {
+        return await context.DonationRequestParticipations
+            .AsNoTracking()
+            .Where(p => p.DonorId == donorId)
+            .ToListAsync(cancellationToken);
+    }
+
     public Task<bool> IsCampaignRequestAsync(Guid requestId, CancellationToken cancellationToken = default) =>
         context.BloodRequestProjections.AnyAsync(
             request => request.Id == requestId && request.RequestType == "Campaign",

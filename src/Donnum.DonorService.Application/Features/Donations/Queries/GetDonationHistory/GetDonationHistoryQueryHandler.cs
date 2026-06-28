@@ -15,7 +15,8 @@ public class GetDonationHistoryQueryHandler(IDonationRepository donationReposito
         }
 
         var donations = await donationRepository.GetByDonorIdAsync(request.DonorId, cancellationToken);
+        var participations = await donationRepository.GetParticipationsByDonorIdAsync(request.DonorId, cancellationToken);
 
-        return DonationMapper.MapToDto(request.DonorId, donations);
+        return DonationMapper.MapToDto(request.DonorId, donations, participations);
     }
 }

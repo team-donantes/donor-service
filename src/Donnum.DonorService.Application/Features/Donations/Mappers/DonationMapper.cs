@@ -21,7 +21,7 @@ public static class DonationMapper
         };
     }
 
-    public static DonorDonationHistoryDto MapToDto(Guid donorId, List<Donation> donations)
+    public static DonorDonationHistoryDto MapToDto(Guid donorId, List<Donation> donations, List<DonationRequestParticipation> participations)
     {
         return new DonorDonationHistoryDto(
             donorId,
@@ -31,6 +31,12 @@ public static class DonationMapper
                 d.MedicalCenterId,
                 d.DonationDate,
                 d.CreatedAt
+            )).ToList(),
+            participations.Select(p => new ParticipationDto(
+                p.Id,
+                p.DonationRequestId,
+                (int)p.Status,
+                p.RegisteredAt
             )).ToList()
         );
     }

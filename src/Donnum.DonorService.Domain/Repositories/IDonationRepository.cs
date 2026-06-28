@@ -10,5 +10,6 @@ public interface IDonationRepository
 
     Task AddParticipationAsync(DonationRequestParticipation participation, CancellationToken cancellationToken = default);
     Task<DonationRequestParticipation?> GetParticipationAsync(Guid donorId, Guid requestId, CancellationToken cancellationToken = default);
+    Task<List<DonationRequestParticipation>> GetParticipationsByDonorIdAsync(Guid donorId, CancellationToken cancellationToken = default);
     Task<bool> IsCampaignRequestAsync(Guid requestId, CancellationToken cancellationToken = default);
 }
