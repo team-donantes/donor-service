@@ -10,6 +10,13 @@ public record DonationHistoryItemDto(
     DateTime DonationDate,
     DateTime CreatedAt);
 
+public record ParticipationDto(
+    Guid Id,
+    Guid DonationRequestId,
+    int Status,
+    DateTime RegisteredAt);
+
 public record DonorDonationHistoryDto(
     Guid DonorId,
-    List<DonationHistoryItemDto> Donations);
+    List<DonationHistoryItemDto> Donations,
+    List<ParticipationDto> Participations);
