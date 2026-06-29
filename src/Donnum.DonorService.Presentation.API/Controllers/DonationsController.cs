@@ -26,7 +26,7 @@ public class DonationsController : ControllerBase
             return BadRequest("DonorId in route does not match DonorId in payload.");
         }
 
-        var command = new CreateParticipationCommand(donorId, request.DonationRequestId, request.Status);
+        var command = new CreateParticipationCommand(donorId, request.DonationRequestId, request.Status, request.RequestedBloodTypes);
         await _mediator.Send(command, cancellationToken);
         
         return Ok();
@@ -42,4 +42,4 @@ public class DonationsController : ControllerBase
     }
 }
 
-public record CreateParticipationRequest(Guid DonorId, Guid DonationRequestId, ParticipationStatus Status);
+public record CreateParticipationRequest(Guid DonorId, Guid DonationRequestId, ParticipationStatus Status, List<string> RequestedBloodTypes);
