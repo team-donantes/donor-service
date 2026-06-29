@@ -55,7 +55,7 @@ public static class DonorMapper
         donor.UpdatedAt = DateTime.UtcNow;
     }
 
-    public static DonorProfileDto ToDto(Donor donor)
+    public static DonorProfileDto ToDto(Donor donor, bool? attended = null)
         => new(
             Id: donor.Id,
             AuthUserId: donor.AuthUserId,
@@ -71,6 +71,7 @@ public static class DonorMapper
             Points: donor.Points,
             Reliability: donor.ReliabilityScore?.Score ?? 100,
             CreatedAt: donor.CreatedAt,
-            UpdatedAt: donor.UpdatedAt
+            UpdatedAt: donor.UpdatedAt,
+            Attended: attended
         );
 }

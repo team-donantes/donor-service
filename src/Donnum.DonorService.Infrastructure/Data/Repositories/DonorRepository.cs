@@ -49,6 +49,19 @@ public sealed class DonorRepository : IDonorRepository
             .Distinct()
             .ToListAsync(cancellationToken);
 
+    public async Task<IReadOnlyList<(Donor Donor, bool Attended)>> GetDonorsWithAttendanceByRequestIdAsync(Guid requestId, CancellationToken cancellationToken = default)
+    {
+        var query = from p in _context.DonationRequestParticipations.AsNoTracking()
+                    where p.DonationRequestId == requestId
+                    join d in _context.Donations.AsNoTracking()
+                        on new { p.DonorId, p.DonationRequestId } equals new { d.DonorId, d.DonationRequestId } into dGroup
+                    from d in dGroup.DefaultIfEmpty()
+                    select new { p.Donor, Attended = d != null };
+
+        var result = await query.ToListAsync(cancellationToken);
+        return result.Select(x => (x.Donor, x.Attended)).DistinctBy(x => x.Donor.Id).ToList();
+    }
+
     public async Task<Donor?> GetWithReliabilityScoreByIdAsync(Guid id, bool trackChanges = false, CancellationToken cancellationToken = default)
     {
         IQueryable<Donor> query = _context.Donors.Include(d => d.ReliabilityScore);

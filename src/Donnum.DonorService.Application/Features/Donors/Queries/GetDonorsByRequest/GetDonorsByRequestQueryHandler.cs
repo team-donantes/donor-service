@@ -16,8 +16,8 @@ public sealed class GetDonorsByRequestQueryHandler : IRequestHandler<GetDonorsBy
 
     public async Task<IReadOnlyList<DonorProfileDto>> Handle(GetDonorsByRequestQuery request, CancellationToken cancellationToken)
     {
-        var donors = await _donorRepository.GetDonorsByRequestIdAsync(request.RequestId, cancellationToken);
+        var donorsWithAttendance = await _donorRepository.GetDonorsWithAttendanceByRequestIdAsync(request.RequestId, cancellationToken);
         
-        return donors.Select(DonorMapper.ToDto).ToList();
+        return donorsWithAttendance.Select(x => DonorMapper.ToDto(x.Donor, x.Attended)).ToList();
     }
 }
