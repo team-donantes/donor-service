@@ -18,6 +18,7 @@ public sealed record DonorProfileDto(
     int Points,
     int Reliability,
     DateTime CreatedAt,
-    DateTime UpdatedAt
+    DateTime UpdatedAt,
+    bool? Attended = null
 )
 ;

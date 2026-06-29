@@ -70,6 +70,14 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
             donor.Points += 50;
         }
 
+        var participation = await _donationRepository.GetParticipationAsync(request.DonorId, request.DonationRequestId, cancellationToken);
+        if (participation != null)
+        {
+            participation.Status = request.Attended ? Domain.Enums.ParticipationStatus.Attended : Domain.Enums.ParticipationStatus.Missed;
+            participation.UpdatedAt = DateTime.UtcNow;
+        }
+
+
         if (request.Attended)
         {
             var eventId = Guid.NewGuid();

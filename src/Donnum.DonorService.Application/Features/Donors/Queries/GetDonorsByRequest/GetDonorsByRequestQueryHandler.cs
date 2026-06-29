@@ -16,8 +16,17 @@ public sealed class GetDonorsByRequestQueryHandler : IRequestHandler<GetDonorsBy
 
     public async Task<IReadOnlyList<DonorProfileDto>> Handle(GetDonorsByRequestQuery request, CancellationToken cancellationToken)
     {
-        var donors = await _donorRepository.GetDonorsByRequestIdAsync(request.RequestId, cancellationToken);
+        var participations = await _donorRepository.GetDonorsByRequestIdAsync(request.RequestId, cancellationToken);
         
-        return donors.Select(DonorMapper.ToDto).ToList();
+        return participations.Select(p => {
+            var dto = DonorMapper.ToDto(p.Donor);
+            bool? attendedStatus = p.Status switch
+            {
+                Domain.Enums.ParticipationStatus.Attended => true,
+                Domain.Enums.ParticipationStatus.Missed => false,
+                _ => null
+            };
+            return dto with { Attended = attendedStatus };
+        }).ToList();
     }
 }
