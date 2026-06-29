@@ -10,6 +10,7 @@ using Donnum.DonorService.Domain.Enums;
 using Donnum.DonorService.Domain.Repositories;
 using Donnum.DonorService.Application.Features.Donations.Mappers;
 using MediatR;
+using Donnum.DonorService.Application.Features.Donors.Services;
 
 namespace Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance;
 
@@ -19,17 +20,20 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
     private readonly IDonationRepository _donationRepository;
     private readonly IIntegrationEventOutbox _outbox;
     private readonly Application.Features.Donors.Services.IReliabilityCalculator _reliabilityCalculator;
+    private readonly IEvaluateAndAssignBadgesService _evaluateAndAssignBadgesService;
 
     public RegisterAttendanceCommandHandler(
         IDonorRepository donorRepository,
         IDonationRepository donationRepository,
         IIntegrationEventOutbox outbox,
-        Application.Features.Donors.Services.IReliabilityCalculator reliabilityCalculator)
+        Application.Features.Donors.Services.IReliabilityCalculator reliabilityCalculator,
+        IEvaluateAndAssignBadgesService evaluateAndAssignBadgesService)
     {
         _donorRepository = donorRepository;
         _donationRepository = donationRepository;
         _outbox = outbox;
         _reliabilityCalculator = reliabilityCalculator;
+        _evaluateAndAssignBadgesService = evaluateAndAssignBadgesService;
     }
 
     public async Task Handle(RegisterAttendanceCommand request, CancellationToken cancellationToken)
@@ -63,6 +67,7 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
             var donation = DonationMapper.ToEntity(request);
 
             await _donationRepository.AddAsync(donation, cancellationToken);
+            donor.Points += 50;
         }
 
         if (request.Attended)
@@ -107,6 +112,11 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
         }
 
         await _donorRepository.SaveChangesAsync(cancellationToken);
+        
+        if (request.Attended)
+        {
+            await _evaluateAndAssignBadgesService.ExecuteAsync(donor.Id, cancellationToken);
+        }
     }
 
     private async Task EnsureReliabilityScoreExistsAsync(Donor donor, CancellationToken cancellationToken)
