@@ -1,15 +1,16 @@
 using System;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Donnum.BuildingBlocks.Messaging.Abstractions;
+using Donnum.BuildingBlocks.Messaging.Constants;
 using Donnum.DonorService.Application.Exceptions;
 using Donnum.DonorService.Domain.Entities;
 using Donnum.DonorService.Domain.Enums;
 using Donnum.DonorService.Domain.Repositories;
 using Donnum.DonorService.Application.Features.Donations.Mappers;
 using MediatR;
+using Donnum.DonorService.Application.Features.Donors.Services;
 
 namespace Donnum.DonorService.Application.Features.Donors.Commands.RegisterAttendance;
 
@@ -17,19 +18,22 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
 {
     private readonly IDonorRepository _donorRepository;
     private readonly IDonationRepository _donationRepository;
-    private readonly IEventBus _eventBus;
+    private readonly IIntegrationEventOutbox _outbox;
     private readonly Application.Features.Donors.Services.IReliabilityCalculator _reliabilityCalculator;
+    private readonly IEvaluateAndAssignBadgesService _evaluateAndAssignBadgesService;
 
     public RegisterAttendanceCommandHandler(
         IDonorRepository donorRepository,
         IDonationRepository donationRepository,
-        IEventBus eventBus,
-        Application.Features.Donors.Services.IReliabilityCalculator reliabilityCalculator)
+        IIntegrationEventOutbox outbox,
+        Application.Features.Donors.Services.IReliabilityCalculator reliabilityCalculator,
+        IEvaluateAndAssignBadgesService evaluateAndAssignBadgesService)
     {
         _donorRepository = donorRepository;
         _donationRepository = donationRepository;
-        _eventBus = eventBus;
+        _outbox = outbox;
         _reliabilityCalculator = reliabilityCalculator;
+        _evaluateAndAssignBadgesService = evaluateAndAssignBadgesService;
     }
 
     public async Task Handle(RegisterAttendanceCommand request, CancellationToken cancellationToken)
@@ -63,30 +67,63 @@ public sealed class RegisterAttendanceCommandHandler : IRequestHandler<RegisterA
             var donation = DonationMapper.ToEntity(request);
 
             await _donationRepository.AddAsync(donation, cancellationToken);
+            donor.Points += 50;
         }
 
-        await _donorRepository.SaveChangesAsync(cancellationToken);
+        var participation = await _donationRepository.GetParticipationAsync(request.DonorId, request.DonationRequestId, cancellationToken);
+        if (participation != null)
+        {
+            participation.Status = request.Attended ? Domain.Enums.ParticipationStatus.Attended : Domain.Enums.ParticipationStatus.Missed;
+            participation.UpdatedAt = DateTime.UtcNow;
+        }
+
 
         if (request.Attended)
         {
-            var eventPayload = new
-            {
-                DonorId = donor.Id,
-                DonationRequestId = request.DonationRequestId,
-                MedicalCenterId = request.MedicalCenterId,
-                DonationDate = request.DonationDate,
-                RegisteredAt = DateTime.UtcNow
-            };
+            var eventId = Guid.NewGuid();
+            var bloodType = $"{donor.BloodGroup}{(donor.RhFactor == "+" || donor.RhFactor.StartsWith("P", StringComparison.OrdinalIgnoreCase) ? "+" : "-")}";
+            await _outbox.EnqueueAsync(
+                Exchanges.Donor,
+                DonnumEventTopics.DonorDonationRegistered,
+                new
+                {
+                    EventId = eventId,
+                    OccurredAt = DateTimeOffset.UtcNow,
+                    DonorId = donor.Id,
+                    RequestId = request.DonationRequestId,
+                    MedicalCenterId = request.MedicalCenterId,
+                    DonationDate = request.DonationDate,
+                    BloodType = bloodType
+                },
+                request.DonationRequestId.ToString("D"),
+                eventId,
+                cancellationToken);
 
-            var messageEnvelope = new MessageEnvelope
+            if (await _donationRepository.IsCampaignRequestAsync(request.DonationRequestId, cancellationToken))
             {
-                MessageId = Guid.NewGuid().ToString(),
-                CorrelationId = Guid.NewGuid().ToString(),
-                Topic = "donor.donation.registered",
-                Payload = JsonSerializer.Serialize(eventPayload)
-            };
+                var attendanceEventId = Guid.NewGuid();
+                await _outbox.EnqueueAsync(
+                    Exchanges.Request,
+                    DonnumEventTopics.RequestCampaignAttendanceRegistered,
+                    new
+                    {
+                        EventId = attendanceEventId,
+                        OccurredAt = DateTimeOffset.UtcNow,
+                        CampaignId = request.DonationRequestId,
+                        DonorId = donor.Id,
+                        RegisteredAt = DateTimeOffset.UtcNow
+                    },
+                    request.DonationRequestId.ToString("D"),
+                    attendanceEventId,
+                    cancellationToken);
+            }
+        }
 
-            await _eventBus.PublishAsync(messageEnvelope, cancellationToken);
+        await _donorRepository.SaveChangesAsync(cancellationToken);
+        
+        if (request.Attended)
+        {
+            await _evaluateAndAssignBadgesService.ExecuteAsync(donor.Id, cancellationToken);
         }
     }
 

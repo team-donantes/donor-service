@@ -4,6 +4,7 @@ using Donnum.DonorService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Donnum.DonorService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260625182619_AddDonorPhone")]
+    partial class AddDonorPhone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,6 +292,11 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
@@ -310,8 +318,17 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                     b.Property<bool>("IsPregnant")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -358,6 +375,7 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                             BloodGroup = "O",
                             City = "Buenos Aires",
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FirstName = "Donante",
                             Gender = 1,
                             HasGuardianAuthorization = true,
                             HasMedicalRestriction = false,
@@ -365,6 +383,7 @@ namespace Donnum.DonorService.Infrastructure.Migrations
                             IsDeleted = false,
                             IsHealthy = true,
                             IsPregnant = false,
+                            LastName = "Demo",
                             PhoneNumber = "+5491155550101",
                             Points = 0,
                             Province = "Buenos Aires",

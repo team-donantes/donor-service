@@ -8,6 +8,9 @@ public sealed class CreateDonorProfileCommandValidator : AbstractValidator<Creat
     {
         RuleFor(x => x.AuthUserId)
             .NotEmpty().WithMessage("El AuthUserId es obligatorio.");
+        RuleFor(x => x.PhoneNumber)
+            .Matches(@"^\+[1-9]\d{7,14}$")
+            .WithMessage("El teléfono debe usar formato E.164.");
 
         RuleFor(x => x.BloodGroup)
             .NotEmpty().WithMessage("El grupo sanguíneo es obligatorio.")

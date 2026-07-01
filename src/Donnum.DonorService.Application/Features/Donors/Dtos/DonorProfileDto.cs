@@ -6,11 +6,11 @@ namespace Donnum.DonorService.Application.Features.Donors.Dtos;
 public sealed record DonorProfileDto(
     Guid Id,
     Guid AuthUserId,
+    string PhoneNumber,
     string BloodGroup,
     string RhFactor,
     Gender Gender,
     string? Street,
-    string? Phone,
     string City,
     string Province,
     decimal Latitude,
@@ -18,6 +18,7 @@ public sealed record DonorProfileDto(
     int Points,
     int Reliability,
     DateTime CreatedAt,
-    DateTime UpdatedAt
+    DateTime UpdatedAt,
+    bool? Attended = null
 )
 ;

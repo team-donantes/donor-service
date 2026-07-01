@@ -6,6 +6,8 @@ using Donnum.DonorService.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Donnum.BuildingBlocks.Messaging.Abstractions;
+using Donnum.DonorService.Infrastructure.Messaging;
 
 namespace Donnum.DonorService.Infrastructure;
 
@@ -21,6 +23,9 @@ public static class DependencyInjection
         services.AddScoped<IBadgeRepository, BadgeRepository>();
 
         services.AddMessageBroker(configuration);
+        services.AddScoped<IIntegrationEventOutbox, IntegrationEventOutbox>();
+        services.AddHostedService<OutboxPublisherWorker>();
+        services.AddHostedService<BloodRequestCreatedConsumer>();
 
         return services;
     }
